@@ -1,0 +1,20 @@
+extends ../../layout/default.pug
+
+block main
+    div(class="container mx-auto px-4 py-8 max-w-lg")
+        h1(class="text-2xl font-bold text-green-600 mb-6 text-center") Form Đặt Lịch Chăm Sóc Thú Cưng
+        
+        form(action="/booking" method="POST" class="bg-white p-6 rounded-lg shadow-md border border-gray-200")
+            div(class="mb-4")
+                label(class="block text-gray-700 font-medium mb-2") Họ và tên khách hàng:
+                input(type="text" name="fullName" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Nhập họ tên của bạn")
+            
+            div(class="mb-4")
+                label(class="block text-gray-700 font-medium mb-2") Số điện thoại:
+                input(type="text" name="phone" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Nhập số điện thoại")
+
+            div(class="mb-6")
+                label(class="block text-gray-700 font-medium mb-2") Ghi chú cho thú cưng:
+                textarea(name="note" rows="3" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Ví dụ: Bé mèo cần cắt tỉa lông...")
+
+            button(type="submit" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-200 font-semibold") Xác nhận đặt lịch

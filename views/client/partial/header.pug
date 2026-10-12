@@ -1,23 +1,23 @@
-header#header(class="sticky top-0 right-0 z-50 bg-white shadow-sm")
+header#header(class="sticky top-0 right-0 z-50 bg-p-700 text-white shadow-md")
     .container 
         div(class="flex items-center justify-around py-2")
             div(class="flex items-center gap-20")
                 a(class="font-lobster text-3xl" href="/") 
-                    span.text-green-600 Pet
-                    span.text-gray-800 Care
-                nav(class="flex items-center gap-10 font-inter text-base text-gray-600")
-                    a(href="/services" class="hover:text-green-600 font-medium") Dịch vụ 
-                    a(href="/booking" class="hover:text-green-600 font-medium") Đặt lịch
-                    a(href="/about" class="hover:text-green-600 font-medium") Về Chúng Tôi      
-            div(class="font-inter text-base text-gray-600") 
+                    span.text-p-100 Pet
+                    span.text-white Care
+                nav(class="flex items-center gap-10 font-inter text-base text-p-100")
+                    a(href="/services" class="hover:text-white hover:font-semibold") Dịch vụ 
+                    a(href="/rooms" class="hover:text-white hover:font-semibold") Đặt phòng
+                    a(href="/about" class="hover:text-white hover:font-semibold") Về Chúng Tôi      
+            div(class="font-inter text-base") 
                 if(khach_hang)
-                    div(class="hover:bg-green-50 p-3 rounded-full group relative cursor-pointer")
-                        i(class="fa-solid fa-paw text-green-600")
-                        div(class="flex flex-col gap-2 absolute top-[100%] right-0 font-inter w-48 bg-white text-sm invisible group-hover:visible shadow-md p-2 rounded-xl border border-gray-100")
-                            a(href="/user/info" class="hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-lg") Thông tin cá nhân 
-                            a(href="/booking/history" class="hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-lg") Lịch sử đặt lịch 
-                            a(href="/auth/logout" class="hover:text-red-600 hover:bg-gray-100 py-1 px-2 rounded-lg") Đăng xuất 
+                    div(class="hover:bg-p-500 p-3 rounded-full group relative cursor-pointer")
+                        i(class="fa-solid fa-paw text-p-100")
+                        div(class="flex flex-col gap-2 absolute top-[100%] right-0 font-inter w-48 bg-white text-n-800 text-sm invisible group-hover:visible p-2 rounded-xl shadow-md")
+                            a(href="/user/info" class="hover:text-n-800 hover:bg-n-100 py-1 px-2 rounded-xl") Thông tin cá nhân 
+                            a(href="/booking/history" class="hover:text-n-800 hover:bg-n-100 py-1 px-2 rounded-xl") Lịch sử đặt lịch 
+                            a(href="/auth/logout" class="hover:text-danger-500 hover:bg-n-100 py-1 px-2 rounded-xl") Đăng xuất 
                 else 
                     div(class="flex items-center gap-4") 
-                        a(href="/auth/signin" class="px-4 py-2 hover:text-green-600") Đăng nhập 
-                        a(href="/auth/signup" class="bg-green-100 px-4 py-2 rounded-lg hover:bg-green-200 text-green-700 font-medium") Đăng ký
+                        a(href="/auth/signin" class="hover:text-p-100") Đăng nhập 
+                        a(href="/auth/signup" class="bg-p-50 text-p-700 px-4 py-2 rounded-xl font-medium hover:bg-p-100") Đăng ký

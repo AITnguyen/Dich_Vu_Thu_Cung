@@ -1,27 +1,27 @@
-footer(class="bg-white border-t border-gray-100 py-8 text-gray-600 font-inter text-base")
+footer#footer(class="bg-p-700 py-8 text-white")
     .container 
-        div(class="flex flex-col md:flex-row items-center justify-around gap-6")
-            //- Cột thông tin thương hiệu
-            div(class="flex flex-col items-center md:items-start gap-2")
-                a(class="font-lobster text-2xl" href="/") 
-                    span.text-green-600 Pet
-                    span.text-gray-800 Care
-                p(class="text-sm text-gray-500") Đồng hành cùng sức khỏe và niềm vui của thú cưng mỗi ngày.
+        div(class="grid grid-cols-1 md:grid-cols-3 gap-8 font-inter")
+            div
+                a(class="font-lobster text-3xl tracking-wide flex items-center gap-1 mb-2" href="/") 
+                    span.text-p-100 Pet
+                    span.text-white Care
+                p(class="text-sm text-p-100/80") Đồng hành cùng sức khỏe và niềm vui của thú cưng mỗi ngày.
 
-            //- Cột liên kết nhanh
-            div(class="flex items-center gap-8 text-sm")
-                a(href="/services" class="hover:text-green-600 font-medium") Dịch vụ 
-                a(href="/booking" class="hover:text-green-600 font-medium") Đặt lịch
-                a(href="/about" class="hover:text-green-600 font-medium") Về Chúng Tôi
+            div 
+                h2(class="font-lobster font-bold text-2xl mb-3 text-p-100") Liên kết
+                nav(class="flex flex-col gap-2 text-sm")
+                    a(href="/services" class="hover:text-white hover:font-semibold transition-colors") Dịch vụ 
+                    a(href="/rooms" class="hover:text-white hover:font-semibold transition-colors") Đặt phòng
+                    a(href="/about" class="hover:text-white hover:font-semibold transition-colors") Về Chúng Tôi
 
-            //- Cột mạng xã hội / liên hệ
-            div(class="flex items-center gap-4 text-lg text-gray-500")
-                a(href="#" class="hover:text-green-600") 
-                    i(class="fa-brands fa-facebook")
-                a(href="#" class="hover:text-green-600") 
-                    i(class="fa-brands fa-instagram")
-                a(href="#" class="hover:text-green-600") 
-                    i(class="fa-brands fa-tiktok")
+            div
+                h2(class="font-lobster font-bold text-2xl mb-3 text-p-100") Liên Hệ 
+                div(class="flex items-center gap-2 mb-2 text-sm") 
+                    i(class="fa-solid fa-envelope text-p-100")
+                    span support@petcare.vn
+                div(class="flex items-center gap-2 text-sm") 
+                    i(class="fa-solid fa-location-dot text-p-100")
+                    span Cần Thơ, Việt Nam.
 
-        div(class="text-center text-xs text-gray-400 mt-6 pt-4 border-t border-gray-50")
+        div(class="text-center text-xs text-p-100/60 mt-8 pt-4 border-t border-p-500")
             p © 2026 Pet Care Services. All rights reserved.

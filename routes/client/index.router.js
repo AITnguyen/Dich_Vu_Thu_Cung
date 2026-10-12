@@ -1,9 +1,9 @@
-const serviceRouter = require("./service.router");
+const homeRouter = require("./home.router");
+const servicesRouter = require("./services.router");
+const roomsRouter = require("./rooms.router");
 
 module.exports = (app) => {
-  app.get("/", (req, res) => {
-    res.render("client/pages/home/index");
-  });
-
-  app.use("/service", serviceRouter);
+  app.use("/", homeRouter);
+  app.use("/services", servicesRouter);
+  app.use("/rooms", roomsRouter);
 };
