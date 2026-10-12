@@ -1,28 +1,15 @@
-// [GET] /services - Trang danh sách dịch vụ
-module.exports.index = (req, res) => {
-  const services = [
-    {
-      title: "Tắm & Cắt tỉa lông",
-      price: "150.000đ",
-      description:
-        "Dịch vụ làm sạch lông, cắt tỉa gọn gàng và thơm tho cho thú cưng.",
-    },
-    {
-      title: "Khám sức khỏe tổng quát",
-      price: "200.000đ",
-      description: "Kiểm tra sức khỏe định kỳ bởi đội ngũ bác sĩ thú y.",
-    },
-  ];
+const Service = require("../../models/SERVICES.model");
 
-  res.render("client/pages/home/services", {
-    pageTitle: "Danh Sách Dịch Vụ",
-    services: services,
-  });
-};
+module.exports.index = async (req, res) => {
+  try {
+    const services = await Service.getAll();
 
-// [GET] /services/booking - Trang đặt lịch dịch vụ
-module.exports.booking = (req, res) => {
-  res.render("client/pages/home/rooms", {
-    pageTitle: "Đặt Lịch Dịch Vụ",
-  });
+    res.render("client/pages/services/index", {
+      pageTitle: "Danh Sách Dịch Vụ",
+      services: services,
+    });
+  } catch (error) {
+    console.error("Lỗi khi tải trang dịch vụ:", error);
+    res.redirect("/");
+  }
 };

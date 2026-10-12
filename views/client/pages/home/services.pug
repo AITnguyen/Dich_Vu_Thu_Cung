@@ -1,19 +1,13 @@
 extends ../../layout/default.pug
-include ../../mixin/alert.pug
 
 block main
-    +errorAlert(3000)
-    +successAlert(3000)
-
-    section.py-12
-        .container
-            //- Tiêu đề trang dịch vụ
+    section(class="py-12")
+        .container(class="mx-auto px-4")
             div(class="text-center mb-10")
                 h1(class="font-inter text-n-800 font-bold text-4xl mb-2") Danh Sách Dịch Vụ PetCare
                 p(class="text-n-500 text-base") Các gói chăm sóc sức khỏe và làm đẹp toàn diện cho thú cưng của bạn
 
-            //- Lưới danh sách dịch vụ
-            div(class="grid grid-cols-1 md:grid-cols-3 gap-3")
+            div(class="grid grid-cols-1 md:grid-cols-3 gap-6")
                 each item in services
                     div(class="border border-n-200 rounded-2xl bg-white overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between")
                         div
@@ -34,7 +28,6 @@ block main
                                 h2(class="font-inter text-p-700 text-lg font-bold") #{item.price} VND
                                 a(href=`/services/detail/${item.id}` class="text-n-500 hover:text-p-500 font-medium text-sm underline") Chi tiết
                             
-                            //- Nút đặt lịch với khung bọc nâu đậm đồng bộ
                             div(class="flex justify-center mt-2")
                                 div(class="inline-flex bg-p-700 p-1 rounded-full")
                                     a(href=`/services/booking/${item.id}` class="inline-flex items-center justify-center bg-p-500 text-white px-6 py-2 rounded-full font-semibold text-sm hover:bg-p-700 transition-all duration-200") Đặt Lịch Ngay
