@@ -1,16 +1,20 @@
 const express = require("express");
 require("dotenv").config();
 const clientRouter = require("./routes/client/index.router");
-
+const database = require("./config/database");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
-// Public
-app.use(express.static(`${__dirname}/public`));
+// connect database
+// initData.initTables();
+database.connect();
 
 // Pug
 app.set("views", "./views");
 app.set("view engine", "pug");
+
+// Public
+app.use(express.static(`${__dirname}/public`));
 
 // Route
 clientRouter(app);

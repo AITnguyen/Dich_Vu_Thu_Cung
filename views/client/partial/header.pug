@@ -6,9 +6,9 @@ header#header(class="sticky top-0 right-0 z-50 bg-p-700 text-white shadow-md")
                     span.text-p-100 Pet
                     span.text-white Care
                 nav(class="flex items-center gap-10 font-inter text-base text-p-100")
-                    a(href="/services" class="hover:text-white hover:font-semibold") Dịch vụ 
-                    a(href="/rooms" class="hover:text-white hover:font-semibold") Đặt phòng
-                    a(href="/about" class="hover:text-white hover:font-semibold") Về Chúng Tôi      
+                    a(href="/services" class="text-white hover:font-semibold") Dịch vụ 
+                    a(href="/rooms" class="text-white hover:font-semibold") Đặt phòng
+                    a(href="/about" class="text-white hover:font-semibold") Về Chúng Tôi      
             div(class="font-inter text-base") 
                 if(khach_hang)
                     div(class="hover:bg-p-500 p-3 rounded-full group relative cursor-pointer")
@@ -19,5 +19,5 @@ header#header(class="sticky top-0 right-0 z-50 bg-p-700 text-white shadow-md")
                             a(href="/auth/logout" class="hover:text-danger-500 hover:bg-n-100 py-1 px-2 rounded-xl") Đăng xuất 
                 else 
                     div(class="flex items-center gap-4") 
-                        a(href="/auth/signin" class="hover:text-p-100") Đăng nhập 
-                        a(href="/auth/signup" class="bg-p-50 text-p-700 px-4 py-2 rounded-xl font-medium hover:bg-p-100") Đăng ký
+                        a(href="/auth/signin" class="text-white") Đăng nhập 
+                        a(href="/auth/signup" class="bg-p-50 text-black px-4 py-2 rounded-xl font-medium hover:bg-p-100") Đăng ký
