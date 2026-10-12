@@ -1,0 +1,17 @@
+//- Thông báo thành công
+mixin successAlert(time)
+  - if (messages && messages.success)
+    .alert.alert-success.alert-dismissible.fade.show.shadow-sm.mb-4(role="alert" data-time=time)
+      i.fa-solid.fa-circle-check.me-2
+      strong Thành công! 
+      | #{messages.success}
+      button.btn-close(type="button" data-bs-dismiss="alert" aria-label="Close")
+
+//- Thông báo lỗi
+mixin errorAlert(time)
+  - if (messages && messages.error)
+    .alert.alert-danger.alert-dismissible.fade.show.shadow-sm.mb-4(role="alert" data-time=time)
+      i.fa-solid.fa-circle-exclamation.me-2
+      strong Lỗi! 
+      | #{messages.error}
+      button.btn-close(type="button" data-bs-dismiss="alert" aria-label="Close")

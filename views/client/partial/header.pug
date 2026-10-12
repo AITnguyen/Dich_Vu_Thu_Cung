@@ -1,0 +1,23 @@
+header#header(class="sticky top-0 right-0 z-50 bg-white shadow-sm")
+    .container 
+        div(class="flex items-center justify-around py-2")
+            div(class="flex items-center gap-20")
+                a(class="font-lobster text-3xl" href="/") 
+                    span.text-green-600 Pet
+                    span.text-gray-800 Care
+                nav(class="flex items-center gap-10 font-inter text-base text-gray-600")
+                    a(href="/services" class="hover:text-green-600 font-medium") Dịch vụ 
+                    a(href="/booking" class="hover:text-green-600 font-medium") Đặt lịch
+                    a(href="/about" class="hover:text-green-600 font-medium") Về Chúng Tôi      
+            div(class="font-inter text-base text-gray-600") 
+                if(khach_hang)
+                    div(class="hover:bg-green-50 p-3 rounded-full group relative cursor-pointer")
+                        i(class="fa-solid fa-paw text-green-600")
+                        div(class="flex flex-col gap-2 absolute top-[100%] right-0 font-inter w-48 bg-white text-sm invisible group-hover:visible shadow-md p-2 rounded-xl border border-gray-100")
+                            a(href="/user/info" class="hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-lg") Thông tin cá nhân 
+                            a(href="/booking/history" class="hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-lg") Lịch sử đặt lịch 
+                            a(href="/auth/logout" class="hover:text-red-600 hover:bg-gray-100 py-1 px-2 rounded-lg") Đăng xuất 
+                else 
+                    div(class="flex items-center gap-4") 
+                        a(href="/auth/signin" class="px-4 py-2 hover:text-green-600") Đăng nhập 
+                        a(href="/auth/signup" class="bg-green-100 px-4 py-2 rounded-lg hover:bg-green-200 text-green-700 font-medium") Đăng ký

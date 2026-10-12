@@ -1,0 +1,115 @@
+extend ../../layout/default.pug
+include ../../mixin/alert.pug
+
+block main
+
+  +errorAlert(3000)
+  +successAlert(3000)
+
+  section#hero.mb-20
+    .bg-p-50
+      .container
+        div(class="grid grid-cols-2 min-h-[600px] items-center gap-5 mx-auto h-screen")
+          div(class="flex flex-col gap-6")
+            p(class="text-ocean text-lg uppercase font-bold") PetCare &bull; Dịch Vụ Chăm Sóc Thú Cưng
+            h2(class="font-lobster text-7xl") 
+              span(class="text-n-800") Chăm sóc tận tâm 
+              br
+              span(class="text-ocean") cho thú cưng của bạn.
+            p(class="text-n-500 text-base") Dịch vụ tắm sấy, cắt tỉa lông, spa và khám sức khỏe định kỳ cho chó mèo với đội ngũ chuyên nghiệp, tận tình.
+            a(href="/services/booking")
+              button.btn-ocean.px-6.py-3.rounded-xl.font-semibold.flex.items-center.gap-2
+                span Đặt Lịch Ngay
+                i(class="fa-solid fa-arrow-right-long")
+          div(class="flex items-center justify-center")
+            div(class="w-[470px] rounded-2xl bg-white p-3 shadow-xl rotate-3")
+              img(
+                src="/image/hero-pet.jpg"
+                alt="Chăm sóc thú cưng"
+                class="h-[340px] w-full rounded-xl object-cover"
+              )
+
+  section#feature.mb-20
+    .container 
+      div(class="flex items-center justify-between")
+        .mb-4 
+          h3(class="font-inter text-n-800 font-semibold text-4xl mb-2") Dịch vụ nổi bật 
+          p(class="text-n-500 text-base") Các gói chăm sóc được nhiều chủ nuôi lựa chọn nhất 
+        div 
+          a(href="/services" class="btn text-lg text-ocean") Xem tất cả 
+
+      div(class="grid grid-cols-3 gap-5")
+        div(class="border border-n-200 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200")
+          div
+            img(src="/image/service-grooming.jpg" alt="Tắm & Spa" class="h-[250px] w-full object-cover rounded-t-2xl") 
+          div(class="flex flex-col gap-3 p-4")
+            h3(class="font-inter text-n-800 text-xl font-bold") Combo Tắm & Spa Toàn Diện
+            div(class="flex items-center gap-2 text-n-500") 
+              i(class="fa-solid fa-paw")
+              span Dành cho Chó & Mèo
+            div(class="flex items-center gap-2 text-n-500") 
+              i(class="fa-solid fa-location-dot") 
+              span Chi nhánh Ninh Kiều, Cần Thơ
+            div(class="flex items-center justify-between")  
+              h2(class="font-inter text-ocean text-lg font-bold") 150.000 VND / lượt
+              a(href="/services/detail" class="btn") Chi tiết
+            div(class="flex items-center justify-center mt-4") 
+              a(href="/services/booking" class="btn-ocean text-center w-full py-2 rounded-lg font-semibold") Đặt Lịch Ngay
+
+        div(class="border border-n-200 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200")
+          div
+            img(src="/image/service-trimming.jpg" alt="Cắt tỉa lông" class="h-[250px] w-full object-cover rounded-t-2xl") 
+          div(class="flex flex-col gap-3 p-4")
+            h3(class="font-inter text-n-800 text-xl font-bold") Cắt Tỉa & Tạo Kiểu Lông
+            div(class="flex items-center gap-2 text-n-500") 
+              i(class="fa-solid fa-scissors")
+              span Tạo kiểu nghệ thuật
+            div(class="flex items-center gap-2 text-n-500") 
+              i(class="fa-solid fa-location-dot") 
+              span Chi nhánh Ninh Kiều, Cần Thơ
+            div(class="flex items-center justify-between")  
+              h2(class="font-inter text-ocean text-lg font-bold") 250.000 VND / lượt
+              a(href="/services/detail" class="btn") Chi tiết
+            div(class="flex items-center justify-center mt-4") 
+              a(href="/services/booking" class="btn-ocean text-center w-full py-2 rounded-lg font-semibold") Đặt Lịch Ngay
+
+        div(class="border border-n-200 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200")
+          div
+            img(src="/image/service-health.jpg" alt="Khám sức khỏe" class="h-[250px] w-full object-cover rounded-t-2xl") 
+          div(class="flex flex-col gap-3 p-4")
+            h3(class="font-inter text-n-800 text-xl font-bold") Khám Sức Khỏe Tổng Quát
+            div(class="flex items-center gap-2 text-n-500") 
+              i(class="fa-solid fa-stethoscope")
+              span Bác sĩ thú y giàu kinh nghiệm
+            div(class="flex items-center gap-2 text-n-500") 
+              i(class="fa-solid fa-location-dot") 
+              span Chi nhánh Ninh Kiều, Cần Thơ
+            div(class="flex items-center justify-between")  
+              h2(class="font-inter text-ocean text-lg font-bold") 200.000 VND / lượt
+              a(href="/services/detail" class="btn") Chi tiết
+            div(class="flex items-center justify-center mt-4") 
+              a(href="/services/booking" class="btn-ocean text-center w-full py-2 rounded-lg font-semibold") Đặt Lịch Ngay
+
+  section#promise.mb-20
+    .bg-p-50.py-8
+      .container 
+        div(class="flex items-center justify-between")
+          .mb-4 
+            h3(class="font-inter text-n-800 font-semibold text-4xl mb-2") PetCare mang lại cho bạn 
+            p(class="text-n-500 text-base") Trải nghiệm chăm sóc thú cưng tiện lợi và an tâm nhất
+        div(class="grid grid-cols-3 gap-5") 
+          div(class="flex flex-col justify-center bg-white rounded-lg px-8 py-4 min-h-[150px] border border-n-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200")
+            div(class="flex items-center gap-2 font-inter text-lg text-ocean font-bold")
+              i(class="fa-solid fa-calendar-check")
+              h3 Đặt lịch nhanh chóng
+            p(class="text-n-500 leading-7") Lựa chọn khung giờ phù hợp và dịch vụ mong muốn chỉ trong vài bước đơn giản.
+          div(class="flex flex-col justify-center bg-white rounded-lg px-8 py-4 min-h-[150px] border border-n-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200")
+            div(class="flex items-center gap-2 font-inter text-lg text-ocean font-bold")
+              i(class="fa-solid fa-user-doctor")
+              h3 Đội ngũ chuyên nghiệp
+            p(class="text-n-500 leading-7") Nhân viên yêu thương động vật, được đào tạo bài bản trong chăm sóc và điều trị.
+          div(class="flex flex-col justify-center bg-white rounded-lg px-8 py-4 min-h-[150px] border border-n-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200")
+            div(class="flex items-center gap-2 font-inter text-lg text-ocean font-bold")
+              i(class="fa-solid fa-receipt")
+              h3 Quản lý lịch hẹn & Hóa đơn
+            p(class="text-n-500 leading-7") Dễ dàng theo dõi tiến trình chăm sóc, lịch sử sử dụng dịch vụ và hóa đơn minh bạch.
