@@ -29,8 +29,11 @@ block main
               td.text-p-500.font-semibold #{item.price}
               td.text-n-500 #{item.description || "Chưa có mô tả"}
               td(style="white-space: nowrap;")
-                // Sử dụng style trực tiếp để ép buộc không xuống dòng
-                span(style="white-space: nowrap;" class="px-3.py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold") Đang hoạt động
+                //- Sử dụng style trực tiếp để đảm bảo hiển thị đúng màu nền 100%
+                if item.status === 'active'
+                  span(style="background-color: #16a34a; color: white;" class="px-3 py-2 rounded-lg text-xs font-semibold inline-block  ") Hoạt động
+                else
+                  span(style="background-color: #d14b43; color: white;" class="px-3 py-2 rounded-lg text-xs font-semibold inline-block") Dừng hoạt động
               td(style="white-space: nowrap;")
                 .flex.items-center.gap-2
                   a(href=`/admin/services/edit/${item.id || index}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors no-underline") Sửa
