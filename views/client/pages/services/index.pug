@@ -1,0 +1,36 @@
+extends ../../layout/default.pug
+
+block main
+    div(style="padding-top: 60px; padding-bottom: 60px;")
+        section#services-hero.mb-12
+            .container
+                .text-center.max-w-2xl.mx-auto.flex.flex-col.gap-3
+                    p(class="text-p-500 text-sm uppercase font-bold tracking-wider") PetCare &bull; Hệ Thống Dịch Vụ
+
+        section#services-list
+            .container 
+                div(class="grid grid-cols-1 md:grid-cols-3 gap-8")
+                    if services && services.length > 0
+                        each item in services
+                            div(class="border border-n-200 rounded-2xl bg-white overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-n-200 flex flex-col")
+                                div
+                                    img(src=item.thumbnail || "/image/thumbnail.jpg" alt=item.title class="h-[250px] w-full object-cover rounded-t-2xl") 
+                                div(class="flex flex-col gap-3 p-6 flex-1 justify-between")
+                                    div(class="flex flex-col gap-3")
+                                        h3(class="font-inter text-n-800 text-xl font-bold") #{item.title}
+                                        div(class="flex items-center gap-2 text-n-500") 
+                                            i(class="fa-solid fa-paw")
+                                            span #{item.category || "Dành cho Thú cưng"}
+                                        div(class="flex items-center gap-2 text-n-500") 
+                                            i(class="fa-solid fa-location-dot") 
+                                            span #{item.location || "Chi nhánh Ninh Kiều, Cần Thơ"}
+                                    
+                                    div(class="pt-4 border-t border-n-100")
+                                        div(class="flex items-center justify-between mb-3")  
+                                            h2(class="font-inter text-p-700 text-lg font-bold") #{item.price}
+                                            a(href=`/services/detail/${item.id}` class="btn no-underline") Chi tiết
+                                        
+                                        div(class="bg-p-700 p-1 rounded-full mt-2")
+                                            a(href=`/services/booking/${item.id}` class="btn-2 w-full rounded-full no-underline text-center") Đặt Lịch Ngay
+                    else
+                        .col-span-3.text-center.py-12.text-n-500 Hiện chưa có dịch vụ nào được cập nhật.

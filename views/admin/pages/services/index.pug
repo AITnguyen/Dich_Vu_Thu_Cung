@@ -3,11 +3,11 @@ extends ../../layout/default.pug
 block main
   .flex.justify-between.items-center.mb-6
     h1.text-2xl.font-bold.text-n-800 Quản lý Dịch vụ Thú Cưng
-    a(href="/admin/services/create", class="btn-2")
+    a(href="/admin/services/create", class="btn-2 no-underline")
       i.fa-solid.fa-plus
       span Thêm Dịch Vụ Mới
 
-  .card
+  .card.bg-white.rounded-xl.shadow-sm.border.border-n-200.overflow-hidden
     table.table-admin
       thead
         tr
@@ -15,17 +15,26 @@ block main
           th Hình ảnh
           th Tên dịch vụ
           th Giá tiền
+          th Mô tả
           th Trạng thái
           th Hành động
       tbody
-        tr
-          td 1
-          td 
-            img(src="/img/thumbnail.jpg", alt="Service", class="w-12 h-12 object-cover rounded-lg")
-          td.font-semibold Tắm và cắt tỉa lông chó mèo
-          td 150.000đ
-          td
-            span.px-3.py-1.bg-green-100.text-green-800.rounded-full.text-xs.font-semibold Hoạt động
-          td.flex.gap-2
-            a(href="/admin/services/edit/1", class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors") Sửa
-            button(class="px-3 py-1.5 bg-red-100 text-danger-500 rounded-lg text-xs font-semibold hover:bg-danger-500 hover:text-white transition-colors") Xóa
+        if services && services.length > 0
+          each item, index in services
+            tr
+              td.font-semibold #{index + 1}
+              td 
+                img(src=item.thumbnail || "/image/thumbnail.jpg", alt="Service", style="width: 60px; height: 60px; object-fit: cover;" class="rounded-lg border border-n-200")
+              td.font-semibold.text-n-800 #{item.title}
+              td.text-p-500.font-semibold #{item.price}
+              td.text-n-500 #{item.description || "Chưa có mô tả"}
+              td(style="white-space: nowrap;")
+                // Sử dụng style trực tiếp để ép buộc không xuống dòng
+                span(style="white-space: nowrap;" class="px-3.py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold") Đang hoạt động
+              td(style="white-space: nowrap;")
+                .flex.items-center.gap-2
+                  a(href=`/admin/services/edit/${item.id || index}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors no-underline") Sửa
+                  button(class="px-3 py-1.5 bg-red-100 text-danger-500 rounded-lg text-xs font-semibold hover:bg-danger-500 hover:text-white transition-colors cursor-pointer") Xóa
+        else
+          tr
+            td(colspan="7" class="text-center py-8 text-n-500") Không có dịch vụ nào được tìm thấy.
