@@ -1,0 +1,18 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+    link(rel="stylesheet", href="/css/output.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css")
+        block main 
+            include ../partial/sidebar.pug
+    
+            #main(class="ml-[250px] min-h-screen flex flex-col")
+                include ../partial/header.pug
+                
+                main(class="flex-1 p-6")
+                    block main-content
+
+        script(src="/admin/js/script.js")

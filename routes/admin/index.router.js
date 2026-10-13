@@ -1,4 +1,4 @@
-const systemConfig = require("../../config.system");
+const systemConfig = require("../../config/system");
 const dashboardRouter = require("./dashboard.router");
 
 module.exports = (app) => {
@@ -6,33 +6,3 @@ module.exports = (app) => {
 
   app.use(PATH_ADMIN + "/dashboard", dashboardRouter);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

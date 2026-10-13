@@ -1,5 +1,5 @@
 module.exports.dashboard = (req, res) => {
-  res.render("admin/page/dashboard/index",{
-    pageTitle: "Trang Tổng Quan"
-  })
+  res.render("admin/pages/dashboard/index", {
+    pageTitle: "Trang Tổng Quan",
+  });
 };
