@@ -1,0 +1,41 @@
+extends ../../layout/defaultSign.pug
+
+block main
+  .min-h-screen.flex.w-full
+    // CỘT TRÁI: Form đăng nhập
+    .w-full.lg:w-1/2.flex.items-center.justify-center.p-8.bg-white
+      .max-w-md.w-full.space-y-6
+        div
+          h2.text-2xl.font-bold.text-n-800 Đăng nhập hệ thống
+          p.text-sm.text-n-500.mt-1 Đăng nhập để trải nghiệm dịch vụ chăm sóc thú cưng tốt nhất.
+
+        form(action="/auth/signin", method="POST" class="space-y-4")
+          .form-control_info
+            label Email đăng nhập
+            input(type="email" name="email" placeholder="Nhập email của bạn" required)
+
+          .form-control_info
+            label Mật khẩu
+            input(type="password" name="password" placeholder="Nhập mật khẩu" required)
+
+          button(type="submit" class="btn-2 w-full justify-center") ĐĂNG NHẬP
+
+        .text-sm.text-center.text-n-800
+          | Bạn chưa có tài khoản? 
+          a(href="/auth/signup" class="text-p-500 font-semibold hover:underline") Đăng ký ngay
+
+    // CỘT PHẢI: Tông màu nâu chủ đạo và thông điệp dịch vụ thú cưng
+    .hidden.lg:flex.w-1/2.bg-n-800.text-white.p-12.flex-col.justify-between
+      .bg-white.px-4.py-2.rounded-full.w-fit
+        span.text-n-800.font-bold.font-lobster PetCare Service
+      
+      .space-y-4.max-w-lg
+        span.px-3.py-1.border.border-n-200.rounded-full.text-xs.uppercase.tracking-wider DỊCH VỤ THÚ CƯNG
+        h1.text-4xl.font-bold.leading-tight
+          | Chăm sóc tận tâm 
+          span.block cho thú cưng của bạn.
+        p.text-n-200.text-sm.leading-relaxed
+          | Cung cấp các giải pháp làm đẹp, lưu trú, y tế và spa chuyên nghiệp, mang lại sự thoải mái và an toàn tuyệt đối cho các bé thú cưng.
+
+      .text-xs.text-n-200
+        | Hệ thống quản lý thông minh và bảo mật dữ liệu khách hàng.

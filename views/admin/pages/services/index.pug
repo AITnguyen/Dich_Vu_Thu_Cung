@@ -1,0 +1,32 @@
+extends ../../layout/default.pug
+
+block main
+  .flex.justify-between.items-center.mb-6
+    h1.text-2xl.font-bold.text-n-800 Quản lý Dịch vụ Thú Cưng
+    a(href="/admin/services/create", class="btn-2")
+      i.fa-solid.fa-plus
+      span Thêm Dịch Vụ Mới
+
+  .card
+    table.table-admin
+      thead
+        tr
+          th STT
+          th Hình ảnh
+          th Tên dịch vụ
+          th Giá tiền
+          th Trạng thái
+          th Hành động
+      tbody
+        //- Ví dụ dòng dữ liệu tĩnh (sau này bạn có thể lặp qua biến truyền từ controller bằng vòng lặp each)
+        tr
+          td 1
+          td 
+            img(src="/img/thumbnail.jpg", alt="Service", class="w-12 h-12 object-cover rounded-lg")
+          td.font-semibold Tắm và cắt tỉa lông chó mèo
+          td 150.000đ
+          td
+            span.px-3.py-1.bg-green-100.text-green-800.rounded-full.text-xs.font-semibold Hoạt động
+          td.flex.gap-2
+            a(href="/admin/services/edit/1", class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors") Sửa
+            button(class="px-3 py-1.5 bg-red-100 text-danger-500 rounded-lg text-xs font-semibold hover:bg-danger-500 hover:text-white transition-colors") Xóa
