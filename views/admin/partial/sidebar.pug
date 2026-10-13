@@ -1,26 +1,42 @@
-aside(class="w-[260px] bg-n-800 text-white fixed top-0 left-0 h-full z-50 flex flex-col")
-  .p-5.text-lg.font-bold.bg-black.bg-opacity-10.flex.items-center.gap-3
-    a(href="/admin/dashboard" class="text-white flex items-center gap-3 no-underline")
-      i.fa-solid.fa-paw
-      span PetCare Admin
-  
-  ul(class="list-none py-4 flex flex-col gap-1")
-    li.sidebar__item
-      a(href="/admin/dashboard" class=`flex items-center gap-3 px-5 py-3 text-n-200 no-underline transition-colors duration-200 hover:bg-n-500 hover:text-white ${path === '/dashboard' ? 'bg-n-500 text-white font-semibold' : ''}`)
-        i.fa-solid.fa-chart-pie
-        span Tổng quan
+section#sidebar(style="position: fixed; top: 0; left: 0; bottom: 0; width: 250px; z-index: 50; overflow-y: auto;" class="bg-p-100 border-r border-n-200 py-8 px-4")
+  div(class="flex flex-col relative gap-16")
+    a(class="font-lobster text-4xl text-center no-underline" href="/admin/dashboard")
+      span.text-p-500 Pet
+      span.text-n-800 Care
+    
+    div(class="absolute top-[60px] right-0 left-0 border-b border-n-200")
 
-    li.sidebar__item
-      a(href="/admin/services" class=`flex items-center gap-3 px-5 py-3 text-n-200 no-underline transition-colors duration-200 hover:bg-n-500 hover:text-white ${path === '/services' ? 'bg-n-500 text-white font-semibold' : ''}`)
-        i.fa-solid.fa-notes-medical
-        span Quản lý Dịch vụ
+    div(class="flex flex-col gap-6")  
+      div(class="flex flex-col font-inter text-n-800 gap-2")
+        p(class="text-xs font-bold text-n-500 tracking-wider") TỔNG QUAN
+        div(class="flex flex-col text-sm gap-1 text-n-800")
+          a(href="/admin/dashboard" class="no-underline text-n-800")
+            div(class="flex items-center gap-3 hover:bg-n-800 hover:text-n-50 px-3 py-2.5 transition-all duration-300 rounded-2xl")
+              i(class="fa-solid fa-chart-column")
+              span Dashboard
 
-    li.sidebar__item
-      a(href="/admin/pets" class=`flex items-center gap-3 px-5 py-3 text-n-200 no-underline transition-colors duration-200 hover:bg-n-500 hover:text-white ${path === '/pets' ? 'bg-n-500 text-white font-semibold' : ''}`)
-        i.fa-solid.fa-dog
-        span Thú cưng & Khách hàng
+      div(class="flex flex-col font-inter text-n-800 gap-2")
+        p(class="text-xs font-bold text-n-500 tracking-wider") QUẢN LÝ
+        div(class="flex flex-col text-sm gap-1 text-n-800")
+          a(href="/admin/services" class="no-underline text-n-800")
+            div(class="flex items-center gap-3 hover:bg-n-800 hover:text-n-50 px-3 py-2.5 transition-all duration-300 rounded-2xl")
+              i(class="fa-solid fa-notes-medical")
+              span Dịch vụ
 
-    li.sidebar__item
-      a(href="/admin/settings" class=`flex items-center gap-3 px-5 py-3 text-n-200 no-underline transition-colors duration-200 hover:bg-n-500 hover:text-white ${path === '/settings' ? 'bg-n-500 text-white font-semibold' : ''}`)
-        i.fa-solid.fa-gear
-        span Cài đặt chung
+          a(href="/admin/services" class="no-underline text-n-800")
+            div(class="flex items-center gap-3 hover:bg-n-800 hover:text-n-50 px-3 py-2.5 transition-all duration-300 rounded-2xl")
+              i(class="fa-solid fa-notes-medical")
+              span Pet room
+          
+          a(href="/admin/pets" class="no-underline text-n-800")
+            div(class="flex items-center gap-3 hover:bg-n-800 hover:text-n-50 px-3 py-2.5 transition-all duration-300 rounded-2xl")
+              i(class="fa-solid fa-dog")
+              span Thú cưng & Khách hàng
+
+      div(class="flex flex-col font-inter text-n-800 gap-2")
+        p(class="text-xs font-bold text-n-500 tracking-wider") HỆ THỐNG
+        div(class="flex flex-col text-sm gap-1 text-n-800")
+          a(href="/admin/settings" class="no-underline text-n-800")
+            div(class="flex items-center gap-3 hover:bg-n-800 hover:text-n-50 px-3 py-2.5 transition-all duration-300 rounded-2xl")
+              i(class="fa-solid fa-gear")
+              span Cài đặt chung

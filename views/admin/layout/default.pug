@@ -5,15 +5,14 @@ html(lang="vi")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title #{pageTitle || "Quản Trị Thú Cưng"}
     link(rel="stylesheet", href="/css/output.css")
-    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
   
-  body(class="bg-n-50 font-inter text-n-800")
-    // Thanh Sidebar cố định bên trái
+  body(style="margin: 0; padding: 0; background-color: #fffaf5; font-family: 'Inter', sans-serif;")
+    
     include ../partial/sidebar.pug
 
-    // Vùng chứa nội dung chính bên phải (đẩy lề trái 260px)
-    div(class="ml-[260px] flex flex-col min-h-screen")
+    div(style="margin-left: 250px; min-height: 100vh; display: flex; flex-direction: column;")
+      
       include ../partial/header.pug
       
-      main(class="p-8 flex-1")
+      main(style="padding: 32px; flex: 1;")
         block main
