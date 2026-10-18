@@ -1,40 +1,39 @@
 const db = require("../config/database");
+
+// 1. Tạo bảng KHACH_HANG trong MySQL (nếu chưa tồn tại)
 module.exports.KHACH_HANG = async () => {
   let q = `
-  CREATE TABLE IF NOT EXISTS KHACH_THUE (
-    KT_ID INT AUTO_INCREMENT PRIMARY KEY,
-    KT_TEN VARCHAR(255) NOT NULL,
-    KT_PHAI VARCHAR(50),
-    KT_KEYCOAK VARCHAR(255) UNIQUE,
-    KT_SDT VARCHAR(10) UNIQUE,
-    KT_CCCD VARCHAR(12) UNIQUE,
-    KT_DIACHI VARCHAR(255), 
-    KT_EMAIL VARCHAR(255) UNIQUE,
-    KT_MATKHAU VARCHAR(255) NOT NULL, -- Cột lưu mật khẩu đăng nhập
-    KT_TRANGTHAI VARCHAR(50) DEFAULT "active",
-    KT_ANH LONGTEXT,
-    KT_NGAYTAO DATE
+  CREATE TABLE IF NOT EXISTS KHACH_HANG (
+    KH_ID INT AUTO_INCREMENT PRIMARY KEY,
+    KH_HOTEN VARCHAR(255) NOT NULL,
+    KH_EMAIL VARCHAR(255) UNIQUE NOT NULL,
+    KH_MATKHAU VARCHAR(255) NOT NULL,
+    KH_SDT VARCHAR(20) UNIQUE,
+    KH_CCCD VARCHAR(20) UNIQUE,
+    KH_NGAYTAO DATE
   )
   `;
   try {
     await db.query(q);
-    console.log("Tao bang KHACH_THUE thanh cong");
+    console.log("Tao bang KHACH_HANG thanh cong");
   } catch (error) {
-    console.log("Tao bang KHACH_THUE that bai", error);
+    console.log("Tao bang KHACH_HANG that bai", error);
   }
 };
 
+// 2. Thêm mới khách hàng (Dùng khi đăng ký tài khoản)
 module.exports.INSERT = async (data) => {
   let q = `
-  INSERT INTO KHACH_THUE(KT_TEN, KT_EMAIL, KT_MATKHAU, KT_KEYCOAK, KT_NGAYTAO) 
-  VALUES(?, ?, ?, ?, ?)`;
+  INSERT INTO KHACH_HANG(KH_HOTEN, KH_EMAIL, KH_MATKHAU, KH_SDT, KH_CCCD, KH_NGAYTAO) 
+  VALUES(?, ?, ?, ?, ?, ?)`;
   try {
     await db.query(q, [
-      data.KT_TEN,
-      data.KT_EMAIL,
-      data.KT_MATKHAU,
-      data.KT_KEYCOAK || null,
-      data.KT_NGAYTAO,
+      data.KH_HOTEN,
+      data.KH_EMAIL,
+      data.KH_MATKHAU,
+      data.KH_SDT || null,
+      data.KH_CCCD || null,
+      data.KH_NGAYTAO,
     ]);
   } catch (error) {
     console.log(error);
@@ -43,40 +42,26 @@ module.exports.INSERT = async (data) => {
 };
 
 module.exports.findDuplication = async (arr, data) => {
-  const allowed = ["KT_EMAIL", "KT_SDT", "KT_CCCD"];
+  const allowed = ["KH_EMAIL", "KH_SDT", "KH_CCCD"];
   if (allowed.includes(arr)) {
-    let q = `SELECT * FROM KHACH_THUE WHERE ${arr}=?`;
+    let q = `SELECT * FROM KHACH_HANG WHERE ${arr} = ?`;
     try {
-      const row = await db.query(q, [data]);
-      return row[0];
+      const [rows] = await db.query(q, [data]);
+      return rows[0]; 
     } catch (error) {
       console.log(error);
       throw error;
     }
-  } else throw new Error("Tên cột không hợp lệ");
-};
-
-module.exports.SELECT_KT = async (key, value) => {
-  let q = `
-  SELECT * FROM KHACH_THUE
-  WHERE ${key} = ?
-  `;
-  try {
-    const row = await db.query(q, [value]);
-    return row[0];
-  } catch (error) {
-    throw error;
+  } else {
+    throw new Error("Tên cột không hợp lệ");
   }
 };
 
-module.exports.findByID = async (id) => {
-  let q = `
-  SELECT * FROM KHACH_THUE
-  WHERE KT_ID = ?
-  `;
+module.exports.SELECT_KH = async (key, value) => {
+  let q = `SELECT * FROM KHACH_HANG WHERE ${key} = ?`;
   try {
-    const data = await db.query(q, [id]);
-    return data[0];
+    const [rows] = await db.query(q, [value]);
+    return rows[0];
   } catch (error) {
     throw error;
   }
