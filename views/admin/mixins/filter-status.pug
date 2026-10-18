@@ -1,0 +1,5 @@
+mixin filterStatus(filterStatus) 
+    div(class="border py-1 px-2 border-n-500 rounded-xl font-inter text-sm text-n-500") 
+        select(name="status" id="filter-status") 
+            each item in filterStatus 
+                option(value=item.value selected=item.selected) #{item.name} 

@@ -1,0 +1,12 @@
+header(class="h-[70px] bg-white flex justify-between items-center px-8 shadow-sm")
+  .admin-header__title
+    h2(class="text-lg font-bold text-n-800")
+      span.text-p-700 Pet
+      span.text-500 Care
+
+  .flex.items-center.gap-3
+    img(src="/image/admin.jpg" alt="avt" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" class="border border-n-200")
+    span(class="font-semibold text-sm") Quản trị viên
+    a(href="/admin/auth/logout" class="flex items-center gap-2 text-sm font-semibold text-n-800 px-3 py-1.5 border border-n-200 rounded-xl hover:bg-p-50 transition-all no-underline")
+      i.fa-solid.fa-right-from-bracket
+      span Thoát
