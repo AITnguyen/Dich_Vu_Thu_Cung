@@ -75,6 +75,7 @@ module.exports.signout = (req, res) => {
     if (err) {
       console.log("Lỗi khi đăng xuất:", err);
     }
+    res.clearCookie("connect.sid");
     res.redirect("/auth/signin");
   });
 };
