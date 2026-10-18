@@ -2,14 +2,14 @@ const express = require("express");
 require("dotenv").config();
 const clientRouter = require("./routes/client/index.router");
 const adminRouter = require("./routes/admin/index.router");
-// const mongodb = require("./config/mongodb");
-// const initData = require("./models/initData.model");
+const mongodb = require("./config/mongodb");
+const initData = require("./models/initData.model");
 const app = express();
 const port = process.env.PORT;
 
 // connect database
-// initData.initTables();
-// mongodb.connect();
+initData.initTables();
+mongodb.connect();
 
 // Pug
 app.set("views", "./views");

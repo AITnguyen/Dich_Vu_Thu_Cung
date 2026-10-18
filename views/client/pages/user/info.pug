@@ -1,0 +1,28 @@
+extends ../../layout/default.pug
+
+block main
+  div(class="max-w-4xl mx-auto my-10 p-6 bg-white shadow-md rounded-2xl border border-gray-100")
+    h1(class="text-2xl font-bold text-[#4A3525] mb-6 border-b pb-3") Thông tin tài khoản
+
+    div(class="space-y-4")
+      div(class="flex items-center")
+        span(class="w-36 font-semibold text-gray-600") Họ và tên:
+        span(class="text-gray-800 font-medium") #{user.fullName}
+
+      div(class="flex items-center")
+        span(class="w-36 font-semibold text-gray-600") Email:
+        span(class="text-gray-800 font-medium") #{user.email}
+
+      div(class="flex items-center")
+        span(class="w-36 font-semibold text-gray-600") Số điện thoại:
+        span(class="text-gray-800 font-medium") #{user.phone || 'Chưa cập nhật'}
+
+    div(class="mt-8 flex space-x-4")
+      a(
+        href="/user/edit"
+        class="px-5 py-2.5 bg-[#4A3525] text-white rounded-xl hover:bg-[#38281c] transition font-medium text-sm"
+      ) Chỉnh sửa thông tin
+      a(
+        href="/user/reset-password"
+        class="px-5 py-2.5 border border-[#4A3525] text-[#4A3525] rounded-xl hover:bg-amber-50 transition font-medium text-sm"
+      ) Đổi mật khẩu
