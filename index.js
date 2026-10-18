@@ -23,6 +23,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser("PETCARE_COOKIE_SECRET"));
+
 app.use(
   expressSession({
     secret: "petcare-session-secret",
@@ -31,6 +32,15 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   }),
 );
+
+app.use((req, res, next) => {
+  if (req.session && req.session.khach_hang) {
+    res.locals.khach_hang = req.session.khach_hang;
+  } else {
+    res.locals.khach_hang = null;
+  }
+  next();
+});
 
 // Route
 clientRouter(app);

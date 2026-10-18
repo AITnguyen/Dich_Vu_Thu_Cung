@@ -1,6 +1,4 @@
 const db = require("../config/database");
-
-// 1. Tạo bảng KHACH_HANG trong MySQL (nếu chưa tồn tại)
 module.exports.KHACH_HANG = async () => {
   let q = `
   CREATE TABLE IF NOT EXISTS KHACH_HANG (
@@ -21,7 +19,6 @@ module.exports.KHACH_HANG = async () => {
   }
 };
 
-// 2. Thêm mới khách hàng (Dùng khi đăng ký tài khoản)
 module.exports.INSERT = async (data) => {
   let q = `
   INSERT INTO KHACH_HANG(KH_HOTEN, KH_EMAIL, KH_MATKHAU, KH_SDT, KH_CCCD, KH_NGAYTAO) 
@@ -47,7 +44,7 @@ module.exports.findDuplication = async (arr, data) => {
     let q = `SELECT * FROM KHACH_HANG WHERE ${arr} = ?`;
     try {
       const [rows] = await db.query(q, [data]);
-      return rows[0]; 
+      return rows[0];
     } catch (error) {
       console.log(error);
       throw error;

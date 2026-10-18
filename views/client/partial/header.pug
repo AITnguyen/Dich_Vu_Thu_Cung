@@ -6,17 +6,33 @@ header#header(class="sticky top-0 right-0 z-50 bg-p-700 text-white shadow-md")
                     span.text-p-100 Pet
                     span.text-white Care
                 nav(class="flex items-center gap-10 font-inter text-base text-p-100")
-                    a(href="../services" class="hover:text-white hover:font-semibold") Dịch vụ 
+                    a(href="/services" class="hover:text-white hover:font-semibold") Dịch vụ 
                     a(href="/rooms" class="hover:text-white hover:font-semibold") Phòng lưu trú
-                    a(href="/about" class="hover:text-white hover:font-semibold") Về Chúng Tôi      
-            div(class="font-inter text-base") 
+                    a(href="/about" class="hover:text-white hover:font-semibold") Về Chúng Tôi     
+            
+            div(class="font-inter text-base relative") 
                 if(khach_hang)
-                    div(class="hover:bg-p-500 p-3 rounded-full group relative cursor-pointer")
-                        i(class="fa-solid fa-paw text-p-100")
-                        div(class="flex flex-col gap-2 absolute top-[100%] right-0 font-inter w-48 bg-white text-n-800 text-sm invisible group-hover:visible p-2 rounded-xl shadow-md")
-                            a(href="/user/info" class="hover:text-n-800 hover:bg-n-100 py-1 px-2 rounded-xl") Thông tin cá nhân 
-                            a(href="/booking/history" class="hover:text-n-800 hover:bg-n-100 py-1 px-2 rounded-xl") Lịch sử đặt lịch 
-                            a(href="/auth/logout" class="hover:text-danger-500 hover:bg-n-100 py-1 px-2 rounded-xl") Đăng xuất 
+                    div(class="relative group py-2")
+                        
+                        div(class="hover:bg-p-500 px-4 py-2 rounded-full flex items-center gap-3 cursor-pointer transition")
+                            div(class="w-10 h-10 bg-p-400 rounded-full flex items-center justify-center text-white shadow-inner")
+                                i(class="fa-solid fa-paw text-lg text-p-100") 
+                            span.font-medium.text-white= khach_hang.fullName || 'Tài khoản'
+
+                        div(class="flex flex-col gap-1 absolute top-full right-0 font-inter w-52 bg-white text-n-800 text-sm invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 p-2 rounded-2xl shadow-xl z-50 border border-n-100 pt-3")
+                            
+                            div(class="absolute -top-3 left-0 w-full h-3 bg-transparent")
+
+                            a(href="/user/info" class="hover:text-n-800 hover:bg-n-100 py-2 px-3 rounded-xl transition flex items-center gap-2") 
+                                i(class="fa-solid fa-user text-xs text-gray-500")
+                                | Thông tin cá nhân 
+                            a(href="/booking/history" class="hover:text-n-800 hover:bg-n-100 py-2 px-3 rounded-xl transition flex items-center gap-2") 
+                                i(class="fa-solid fa-calendar-days text-xs text-gray-500")
+                                | Lịch sử đặt lịch 
+                            div(class="border-t border-n-100 my-1")
+                            a(href="/auth/signout" class="hover:text-danger-500 hover:bg-red-50 py-2 px-3 rounded-xl transition flex items-center gap-2") 
+                                i(class="fa-solid fa-right-from-bracket text-xs text-danger-500")
+                                | Đăng xuất 
                 else 
                     div(class="flex items-center gap-4") 
                         a(href="/auth/signin" class="hover:text-white") Đăng nhập 

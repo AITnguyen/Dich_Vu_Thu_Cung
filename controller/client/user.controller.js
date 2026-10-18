@@ -1,6 +1,5 @@
 const KHACH_HANG = require("../../models/KHACH_HANG.model");
 
-// [GET] /user/info - Xem thông tin cá nhân
 module.exports.info = async (req, res) => {
   try {
     const userId = req.session?.userId || req.user?._id;
@@ -24,7 +23,6 @@ module.exports.info = async (req, res) => {
   }
 };
 
-// [GET] /user/edit - Giao diện chỉnh sửa thông tin
 module.exports.edit = async (req, res) => {
   try {
     const userId = req.session?.userId || req.user?._id;
@@ -48,7 +46,6 @@ module.exports.edit = async (req, res) => {
   }
 };
 
-// [POST] /user/edit - Xử lý cập nhật thông tin
 module.exports.editPost = async (req, res) => {
   try {
     const userId = req.session?.userId || req.user?._id;
@@ -70,7 +67,6 @@ module.exports.editPost = async (req, res) => {
   }
 };
 
-// [GET] /user/reset-password - Giao diện đổi mật khẩu
 module.exports.resetPassword = async (req, res) => {
   try {
     res.render("client/pages/user/resetPassword", {
@@ -82,7 +78,6 @@ module.exports.resetPassword = async (req, res) => {
   }
 };
 
-// [POST] /user/reset-password - Xử lý đổi mật khẩu
 module.exports.resetPasswordPost = async (req, res) => {
   try {
     const userId = req.session?.userId || req.user?._id;
