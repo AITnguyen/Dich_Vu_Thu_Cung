@@ -1,6 +1,5 @@
 const db = require("../../config/database");
 
-// Hàm tạo bảng nếu chưa có
 module.exports.DICH_VU = async () => {
   let q = `
   CREATE TABLE IF NOT EXISTS dich_vu (
@@ -19,15 +18,12 @@ module.exports.DICH_VU = async () => {
   }
 };
 
-// Hàm lấy danh sách dịch vụ từ Database truyền ra giao diện
 module.exports.index = async (req, res) => {
   try {
-    // Truy vấn lấy tất cả dịch vụ từ database
     const [rows] = await db.query(
       "SELECT * FROM dich_vu WHERE DV_TRANGTHAI = 'active'",
     );
 
-    // Chuẩn hóa lại cấu trúc dữ liệu nếu cần cho khớp với file Pug cũ của bạn
     const services = rows.map((item) => ({
       id: item.DV_ID,
       title: item.DV_TEN,

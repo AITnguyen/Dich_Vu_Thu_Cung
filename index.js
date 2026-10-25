@@ -6,6 +6,7 @@ const mongodb = require("./config/mongodb");
 const initData = require("./models/initData.model");
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
+const { keycloak, memoryStore } = require("./config/keycloak");
 const app = express();
 const port = process.env.PORT;
 
@@ -23,6 +24,18 @@ app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser("PETCARE_COOKIE_SECRET"));
+
+// keycloak
+app.use(
+  expressSession({
+    secret: "dich-vu-thu-cung-secret",
+    resave: false,
+    saveUninitialized: true,
+    store: memoryStore,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  }),
+);
+app.use(keycloak.middleware());
 
 app.use(
   expressSession({
