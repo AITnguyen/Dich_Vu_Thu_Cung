@@ -91,3 +91,31 @@ module.exports.delete = async (req, res) => {
     res.redirect("/admin/services");
   }
 };
+
+// [GET] /admin/services/create
+module.exports.create = (req, res) => {
+  res.render("admin/pages/services/create", {
+    pageTitle: "Thêm mới Dịch vụ",
+    path: "/services",
+  });
+};
+
+// [POST] /admin/services/create
+module.exports.createPost = async (req, res) => {
+  try {
+    const { title, price, status, description } = req.body;
+
+    // Sửa lại tên các cột cho khớp với cơ sở dữ liệu thực tế (DV_TEN, DV_GIA, DV_TRANGTHAI, DV_MOTA)
+    const query = `
+      INSERT INTO DICH_VU (DV_TEN, DV_GIA, DV_TRANGTHAI, DV_MOTA, DV_NGAYTAO)
+      VALUES (?, ?, ?, ?, NOW())
+    `;
+
+    await db.query(query, [title, price, status || "active", description]);
+
+    res.redirect("/admin/services");
+  } catch (error) {
+    console.log("Lỗi thêm dịch vụ mới:", error);
+    res.redirect("/admin/services/create");
+  }
+};

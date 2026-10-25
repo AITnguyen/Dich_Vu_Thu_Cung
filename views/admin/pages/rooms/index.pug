@@ -3,51 +3,55 @@ include ../../mixins/filter-status.pug
 include ../../mixins/pagination.pug
 
 block main
-  h3(class="text-2xl font-bold mb-4 font-inter text-p-900") Quản lý Phòng lưu trú
+  //- Tiêu đề trang
+  .mb-6
+    h1.text-2xl.font-bold.text-n-800 Quản lý Phòng Lưu Trú
 
-  //- Khung chứa bộ lọc và nút thêm mới
-  div(class="flex items-center justify-between mb-4")
-    +filterStatus(filterStatus)
-    a(
-      href="/admin/rooms/create"
-      class="bg-p-600 hover:bg-p-700 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2"
-    )
-      i(class="fa-solid fa-plus")
-      | Thêm phòng mới
+  //- Hàng chứa Bộ lọc trạng thái (bên trái) và Nút Thêm mới (bên phải)
+  .flex.justify-between.items-center.mb-6
+    .flex.items-center.gap-2
+      +filterStatus(filterStatus)
+    
+    a(href="/admin/rooms/create", class="btn-2 no-underline flex items-center gap-2")
+      i.fa-solid.fa-plus
+      span Thêm Phòng Mới
 
-  //- Bảng danh sách phòng
-  div(class="bg-white rounded-lg shadow overflow-hidden")
-    table(class="w-full text-left border-collapse")
-      thead(class="bg-n-100 text-n-600 uppercase text-xs font-semibold")
+  //- Bảng hiển thị danh sách phòng lưu trú
+  .card.bg-white.rounded-xl.shadow-sm.border.border-n-200.overflow-hidden
+    table.table-admin
+      thead
         tr
-          th(class="py-3 px-4") STT
-          th(class="py-3 px-4") Hình ảnh
-          th(class="py-3 px-4") Tên phòng
-          th(class="py-3 px-4") Sức chứa
-          th(class="py-3 px-4") Giá ngày
-          th(class="py-3 px-4") Trạng thái
-          th(class="py-3 px-4 text-center") Hành động
-      tbody(class="divide-y divide-n-200 text-sm text-n-800")
-        if rooms.length > 0
+          th STT
+          th Hình ảnh
+          th Tên phòng
+          th Sức chứa
+          th Giá ngày
+          th Trạng thái
+          th Hành động
+      tbody
+        if rooms && rooms.length > 0
           each room, index in rooms
-            tr(class="hover:bg-n-50 transition-all")
-              td(class="py-3 px-4 font-medium") #{(pagination.currentPage - 2) * 2 + (index + 1) > 0 ? (pagination.currentPage - 1) * 2 + (index + 1) : index + 1}
-              td(class="py-3 px-4")
-                img(src=room.thumbnail class="w-12 h-12 object-cover rounded-md border")
-              td(class="py-3 px-4 font-semibold text-p-700") #{room.name}
-              td(class="py-3 px-4") #{room.capacity} khách
-              td(class="py-3 px-4 text-red-600 font-medium") #{room.price}
-              td(class="py-3 px-4")
+            - var currentPage = pagination.currentPage || 1
+            - var limit = 5
+            tr
+              td.font-semibold #{(currentPage - 1) * limit + index + 1}
+              td 
+                img(src=room.thumbnail || "/image/thumbnail.jpg", alt="Room", style="width: 60px; height: 60px; object-fit: cover;" class="rounded-lg border border-n-200")
+              td.font-semibold.text-n-800 #{room.name}
+              td.text-n-600 #{room.capacity} khách
+              td.text-p-500.font-semibold #{room.price}
+              td(style="white-space: nowrap;")
                 if room.status === 'active'
-                  span(class="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-semibold") Hoạt động
+                  span(style="background-color: #16a34a; color: white;" class="px-3 py-2 rounded-lg text-xs font-semibold inline-block") Hoạt động
                 else
-                  span(class="bg-red-100 text-red-700 px-2.5 py-1 rounded-full text-xs font-semibold") Dừng hoạt động
-              td(class="py-3 px-4 text-center")
-                a(href=`/admin/rooms/edit/${room.id}` class="text-blue-500 hover:text-blue-700 mr-3 font-medium") Sửa
-                a(href=`/admin/rooms/delete/${room.id}` class="text-red-500 hover:text-red-700 font-medium" onclick="return confirm('Bạn có chắc chắn muốn xóa phòng này không?')") Xóa
+                  span(style="background-color: #d14b43; color: white;" class="px-3 py-2 rounded-lg text-xs font-semibold inline-block") Dừng hoạt động
+              td(style="white-space: nowrap;")
+                .flex.items-center.gap-2
+                  a(href=`/admin/rooms/edit/${room.id}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors no-underline") Sửa
+                  button(class="px-3 py-1.5 bg-red-100 text-danger-500 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors cursor-pointer") Xóa
         else
           tr
-            td(class="py-4 text-center text-n-500" colspan="7") Không tìm thấy phòng lưu trú nào.
+            td(colspan="7" class="text-center py-8 text-n-500") Không tìm thấy phòng lưu trú nào.
 
-  //- Gọi lại Mixin phân trang dùng chung
+  //- Gọi Mixin Phân Trang ở phía dưới bảng
   +pagination(pagination)
