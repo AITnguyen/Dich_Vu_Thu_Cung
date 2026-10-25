@@ -39,19 +39,25 @@ if (formatPrice) {
 // ==========================================
 // 4. PAGINATION (Phân trang)
 // ==========================================
-const pagination = document.querySelector("[pagination]");
-if (pagination) {
-  let url = new URL(window.location.href);
-  const page = pagination.querySelectorAll("[page]");
-  page.forEach((item) => {
-    item.addEventListener("click", () => {
-      const value = item.getAttribute("page");
-      if (value) url.searchParams.set("page", value);
-      else url.searchParams.delete("page");
-      window.location.href = url.href;
+document.addEventListener("DOMContentLoaded", () => {
+  const pagination = document.querySelector("[pagination]");
+  if (pagination) {
+    let url = new URL(window.location.href);
+    const pageButtons = pagination.querySelectorAll("[page]");
+
+    pageButtons.forEach((item) => {
+      item.addEventListener("click", () => {
+        const value = item.getAttribute("page");
+        if (value) {
+          url.searchParams.set("page", value);
+        } else {
+          url.searchParams.delete("page");
+        }
+        window.location.href = url.href;
+      });
     });
-  });
-}
+  }
+});
 
 // ==========================================
 // 5. FORM SEARCH (Tìm kiếm dịch vụ)
@@ -78,9 +84,13 @@ if (filterStatus) {
   let url = new URL(window.location.href);
   filterStatus.addEventListener("change", () => {
     const value = filterStatus.value;
-    // Thay vì "housing", ta dùng "status" để lọc trạng thái active/inactive của dịch vụ
-    if (value) url.searchParams.set("status", value);
-    else url.searchParams.delete("status");
+    if (value) {
+      url.searchParams.set("status", value);
+    } else {
+      url.searchParams.delete("status");
+    }
+    // Xóa số trang hiện tại khi đổi bộ lọc
+    url.searchParams.delete("page");
 
     window.location.href = url.href;
   });

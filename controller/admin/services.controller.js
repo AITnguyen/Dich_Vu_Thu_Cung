@@ -1,13 +1,16 @@
 const db = require("../../config/database");
-const dichVuModel = require("../../models/DICH_VU.model"); // Gọi đúng đường dẫn đến file model của bạn
+const dichVuModel = require("../../models/DICH_VU.model");
 
 // [GET] /admin/services
 module.exports.index = async (req, res) => {
   try {
-    // 1. Lấy trạng thái từ query (nếu người dùng bấm chọn lọc)
+    console.log("-----------------------------------------");
+    console.log("CONTROLLER SERVICES ĐANG CHẠY THỰC TẾ!");
+
+    // 1. Lấy trạng thái từ query trên URL
     const currentStatus = req.query.status || "";
 
-    // 2. Xử lý phân trang
+    // 2. Xử lý đếm tổng số bản ghi thỏa mãn điều kiện lọc
     let queryCountStr = "SELECT COUNT(*) as total FROM DICH_VU WHERE 1=1";
     let countParams = [];
 
@@ -16,16 +19,23 @@ module.exports.index = async (req, res) => {
       countParams.push(currentStatus);
     }
 
-    // Lấy tổng số bản ghi thỏa mãn điều kiện
     const [countResult] = await db.query(queryCountStr, countParams);
-    const totalRecords = countResult[0].total;
+    console.log("📊 Kết quả đếm từ DB (countResult):", countResult);
 
-    const limitItems = 5; // Số lượng dịch vụ hiển thị trên 1 trang (bạn có thể đổi số này tùy ý)
-    const totalPage = Math.ceil(totalRecords / limitItems) || 1; // Tính tổng số trang
+    // Lấy tổng số bản ghi an toàn (tránh trường hợp tên cột bị viết hoa hoặc undefined)
+    const totalRecords = countResult[0]?.total || countResult[0]?.TOTAL || 0;
+    console.log("Tổng số bản ghi (totalRecords):", totalRecords);
+
+    const limitItems = 2; // Cố định 2 bản ghi trên 1 trang để test
+    const totalPage = Math.ceil(totalRecords / limitItems) || 1;
     const currentPage = parseInt(req.query.page) || 1;
     const skip = (currentPage - 1) * limitItems;
 
-    // 3. Viết câu lệnh SQL lấy dữ liệu có kết hợp phân trang (LIMIT, OFFSET) và lọc trạng thái
+    console.log(
+      `📄 Phân trang -> limitItems: ${limitItems}, totalPage: ${totalPage}, currentPage: ${currentPage}, skip: ${skip}`,
+    );
+
+    // 3. Truy vấn lấy dữ liệu có kết hợp lọc trạng thái và phân trang
     let queryStr = "SELECT * FROM DICH_VU WHERE 1=1";
     let queryParams = [];
 
@@ -34,10 +44,14 @@ module.exports.index = async (req, res) => {
       queryParams.push(currentStatus);
     }
 
-    queryStr += " LIMIT ? OFFSET ?";
-    queryParams.push(limitItems, skip);
+    queryStr += ` LIMIT ${limitItems} OFFSET ${skip}`;
+    console.log("🔍 Câu lệnh SQL Query thực tế:", queryStr);
 
     const [rows] = await db.query(queryStr, queryParams);
+    console.log(
+      "📋 Số lượng dòng dữ liệu trả về thực tế (rows.length):",
+      rows.length,
+    );
 
     const services = rows.map((item) => ({
       id: item.DV_ID,
@@ -48,7 +62,7 @@ module.exports.index = async (req, res) => {
       status: item.DV_TRANGTHAI,
     }));
 
-    // 4. Khởi tạo mảng filterStatus khớp với mixin lọc trạng thái
+    // 4. Khởi tạo mảng filterStatus
     const filterStatus = [
       { name: "Tất cả", value: "", selected: currentStatus === "" },
       {
@@ -63,13 +77,13 @@ module.exports.index = async (req, res) => {
       },
     ];
 
-    // 5. Khởi tạo đối tượng phân trang truyền sang view
+    // 5. Khởi tạo phân trang
     const pagination = {
       currentPage: currentPage,
-      totalPage: totalPage, // Truyền tổng số trang tính toán từ DB vào đây
+      totalPage: totalPage,
     };
 
-    // 6. Render ra view kèm theo các biến bắt buộc
+    // 6. Render ra view
     res.render("admin/pages/services/index", {
       pageTitle: "Quản lý Dịch vụ Thú cưng",
       path: "/services",
@@ -87,13 +101,10 @@ module.exports.index = async (req, res) => {
 module.exports.delete = async (req, res) => {
   try {
     const id = req.params.id;
-    // Gọi hàm DELETE từ model dichVuModel
     await dichVuModel.DELETE(id);
-
-    req.flash("success", "Xóa thành công");
     res.redirect("/admin/services");
   } catch (error) {
-    req.flash("error", "Xóa thất bại");
+    console.log(error);
     res.redirect("/admin/services");
   }
 };
