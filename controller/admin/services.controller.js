@@ -1,5 +1,7 @@
 const db = require("../../config/database");
 const dichVuModel = require("../../models/DICH_VU.model");
+// const multer = require("multer");
+// const path = require("path");
 
 // [GET] /admin/services
 module.exports.index = async (req, res) => {
@@ -80,14 +82,17 @@ module.exports.index = async (req, res) => {
   }
 };
 
-// [DELETE] /admin/services/delete/:id
-module.exports.delete = async (req, res) => {
+// [POST] /admin/services/delete/:id
+module.exports.deleteItem = async (req, res) => {
   try {
     const id = req.params.id;
-    await dichVuModel.DELETE(id);
-    res.redirect("/admin/services");
+
+    // Thực hiện xóa dịch vụ trong database theo khóa chính DV_ID
+    await db.query("DELETE FROM DICH_VU WHERE DV_ID = ?", [id]);
+
+    res.redirect("/admin/services"); // Quay lại trang trước sau khi xóa thành công
   } catch (error) {
-    console.log(error);
+    console.log("Lỗi xóa dịch vụ:", error);
     res.redirect("/admin/services");
   }
 };
@@ -119,3 +124,52 @@ module.exports.createPost = async (req, res) => {
     res.redirect("/admin/services/create");
   }
 };
+
+// // [GET] /admin/services/edit/:id
+// module.exports.edit = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const [services] = await db.query("SELECT * FROM DICH_VU WHERE id = ?", [
+//       id,
+//     ]);
+
+//     if (services.length > 0) {
+//       res.render("admin/pages/services/edit", {
+//         pageTitle: "Chỉnh sửa Dịch vụ",
+//         service: services[0],
+//         path: "/services",
+//       });
+//     } else {
+//       res.redirect("/admin/services");
+//     }
+//   } catch (error) {
+//     console.log("Lỗi lấy dữ liệu dịch vụ để sửa:", error);
+//     res.redirect("/admin/services");
+//   }
+// };
+
+// // [PATCH] /admin/services/edit/:id
+// module.exports.editPatch = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const { title, price, status, description } = req.body;
+
+//     // Giữ lại ảnh cũ nếu người dùng không chọn ảnh mới
+//     let thumbnail = req.body.oldThumbnail;
+//     if (req.file) {
+//       thumbnail = `/uploads/${req.file.filename}`;
+//     }
+
+//     const query = `
+//       UPDATE DICH_VU
+//       SET title = ?, price = ?, status = ?, description = ?, thumbnail = ?
+//       WHERE id = ?
+//     `;
+
+//     await db.query(query, [title, price, status, description, thumbnail, id]);
+//     res.redirect("/admin/services");
+//   } catch (error) {
+//     console.log("Lỗi cập nhật dịch vụ:", error);
+//     res.redirect(`/admin/services/edit/${req.params.id}`);
+//   }
+// };
