@@ -20,3 +20,15 @@ module.exports.PHONG_LUU_TRU = async () => {
     console.log("Tao bang PHONG_LUU_TRU that bai");
   }
 };
+
+// Xoa phong
+module.exports.DELETE = async (id) => {
+  try {
+    const [result] = await db.query("DELETE FROM PHONG WHERE PHONG_ID = ?", [
+      id,
+    ]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};

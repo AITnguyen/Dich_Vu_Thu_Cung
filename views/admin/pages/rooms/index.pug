@@ -1,0 +1,53 @@
+extends ../../layout/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/pagination.pug
+
+block main
+  h3(class="text-2xl font-bold mb-4 font-inter text-p-900") Quản lý Phòng lưu trú
+
+  //- Khung chứa bộ lọc và nút thêm mới
+  div(class="flex items-center justify-between mb-4")
+    +filterStatus(filterStatus)
+    a(
+      href="/admin/rooms/create"
+      class="bg-p-600 hover:bg-p-700 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2"
+    )
+      i(class="fa-solid fa-plus")
+      | Thêm phòng mới
+
+  //- Bảng danh sách phòng
+  div(class="bg-white rounded-lg shadow overflow-hidden")
+    table(class="w-full text-left border-collapse")
+      thead(class="bg-n-100 text-n-600 uppercase text-xs font-semibold")
+        tr
+          th(class="py-3 px-4") STT
+          th(class="py-3 px-4") Hình ảnh
+          th(class="py-3 px-4") Tên phòng
+          th(class="py-3 px-4") Sức chứa
+          th(class="py-3 px-4") Giá ngày
+          th(class="py-3 px-4") Trạng thái
+          th(class="py-3 px-4 text-center") Hành động
+      tbody(class="divide-y divide-n-200 text-sm text-n-800")
+        if rooms.length > 0
+          each room, index in rooms
+            tr(class="hover:bg-n-50 transition-all")
+              td(class="py-3 px-4 font-medium") #{(pagination.currentPage - 2) * 2 + (index + 1) > 0 ? (pagination.currentPage - 1) * 2 + (index + 1) : index + 1}
+              td(class="py-3 px-4")
+                img(src=room.thumbnail class="w-12 h-12 object-cover rounded-md border")
+              td(class="py-3 px-4 font-semibold text-p-700") #{room.name}
+              td(class="py-3 px-4") #{room.capacity} khách
+              td(class="py-3 px-4 text-red-600 font-medium") #{room.price}
+              td(class="py-3 px-4")
+                if room.status === 'active'
+                  span(class="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-semibold") Hoạt động
+                else
+                  span(class="bg-red-100 text-red-700 px-2.5 py-1 rounded-full text-xs font-semibold") Dừng hoạt động
+              td(class="py-3 px-4 text-center")
+                a(href=`/admin/rooms/edit/${room.id}` class="text-blue-500 hover:text-blue-700 mr-3 font-medium") Sửa
+                a(href=`/admin/rooms/delete/${room.id}` class="text-red-500 hover:text-red-700 font-medium" onclick="return confirm('Bạn có chắc chắn muốn xóa phòng này không?')") Xóa
+        else
+          tr
+            td(class="py-4 text-center text-n-500" colspan="7") Không tìm thấy phòng lưu trú nào.
+
+  //- Gọi lại Mixin phân trang dùng chung
+  +pagination(pagination)
