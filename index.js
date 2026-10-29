@@ -7,6 +7,7 @@ const initData = require("./models/initData.model");
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const { keycloak, memoryStore } = require("./config/keycloak");
+const flash = require("connect-flash");
 const app = express();
 const port = process.env.PORT;
 
@@ -45,6 +46,9 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   }),
 );
+
+// --- 5. CẤU HÌNH FLASH (BẮT BUỘC ĐỨNG TRƯỚC ROUTER) ---
+app.use(flash());
 
 app.use((req, res, next) => {
   if (req.session && req.session.khach_hang) {

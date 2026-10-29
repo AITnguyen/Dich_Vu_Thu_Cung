@@ -48,16 +48,18 @@ block main
               td(style="white-space: nowrap;")
                 .flex.items-center.gap-2
                   a(href=`/admin/services/edit/${item.id}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg text-xs font-semibold hover:bg-p-500 hover:text-white transition-colors no-underline") Sửa
+                  
                   form(
                     action=`/admin/services/delete/${item.id}`
                     method="POST"
-                    class="inline-block"
+                    class="inline-block form-delete"
                   )
                     button(
-                      type="submit"
-                      class="px-3 py-1 bg-red-500 hover:bg-red-600 text-danger-500 rounded-lg font-semibold transition-all cursor-pointer"
-                      onclick="return confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?');"
-                    ) Xóa                 
+                      type="button"
+                      button-delete
+                      class="px-3 py-1 bg-red-500 hover:bg-red-500 text-danger-500 rounded-lg font-semibold transition-all cursor-pointer"
+                    ) Xóa
+               
         else
           tr
             td(colspan="7" class="text-center py-8 text-n-500") Không có dịch vụ nào được tìm thấy.

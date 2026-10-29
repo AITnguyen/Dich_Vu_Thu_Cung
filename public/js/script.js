@@ -97,3 +97,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ==========================================
+// 7. Xac nhan xoa dich vu
+// ==========================================
+// Xử lý xác nhận xóa dịch vụ bằng SweetAlert2
+document.addEventListener("DOMContentLoaded", () => {
+  const buttonsDelete = document.querySelectorAll("[button-delete]");
+
+  if (buttonsDelete.length > 0) {
+    buttonsDelete.forEach((button) => {
+      button.addEventListener("click", () => {
+        // Tìm thẻ form chứa nút xóa hiện tại
+        const formDelete = button.closest("form");
+
+        if (formDelete) {
+          Swal.fire({
+            title: "Xóa dịch vụ?",
+            text: "Bạn có chắc chắn muốn xóa dịch vụ này không?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Đồng ý",
+            cancelButtonText: "Hủy",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Gửi form đi khi người dùng nhấn Đồng ý
+              formDelete.submit();
+            }
+          });
+        }
+      });
+    });
+  }
+});
