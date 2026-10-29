@@ -1,7 +1,5 @@
 const db = require("../../config/database");
 const dichVuModel = require("../../models/DICH_VU.model");
-// const multer = require("multer");
-// const path = require("path");
 
 // [GET] /admin/services
 module.exports.index = async (req, res) => {
@@ -112,14 +110,22 @@ module.exports.createPost = async (req, res) => {
   try {
     const { title, price, status, description } = req.body;
 
+    // Lấy link ảnh từ middleware trả về (nếu có)
+    const thumbnail = req.body.thumbnail || "";
+
     const query = `
-      INSERT INTO DICH_VU (DV_TEN, DV_GIA, DV_TRANGTHAI, DV_MOTA, DV_NGAYTAO)
-      VALUES (?, ?, ?, ?, NOW())
+      INSERT INTO DICH_VU (DV_TEN, DV_GIA, DV_TRANGTHAI, DV_MOTA, DV_ANH, DV_NGAYTAO)
+      VALUES (?, ?, ?, ?, ?, NOW())
     `;
 
-    await db.query(query, [title, price, status || "active", description]);
+    await db.query(query, [
+      title,
+      price,
+      status || "active",
+      description,
+      thumbnail,
+    ]);
 
-    // Thêm thông báo thành công (nếu dùng connect-flash)
     req.flash("success", "Thêm mới dịch vụ thành công!");
     res.redirect("/admin/services");
   } catch (error) {
@@ -160,18 +166,38 @@ module.exports.edit = async (req, res) => {
 
 // [POST] /admin/services/edit/:id
 module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+
   try {
-    const id = req.params.id;
     const { title, price, status, description } = req.body;
 
-    // Câu lệnh SQL cập nhật thông tin dịch vụ
+    // 1. Lấy thông tin ảnh cũ trong database ra trước
+    const [rows] = await db.query(
+      "SELECT DV_ANH FROM DICH_VU WHERE DV_ID = ?",
+      [id],
+    );
+    let thumbnail = rows[0] ? rows[0].DV_ANH : "";
+
+    // 2. Nếu người dùng có chọn ảnh mới thì cập nhật link ảnh mới
+    if (req.body.thumbnail) {
+      thumbnail = req.body.thumbnail;
+    }
+
+    // 3. Thực hiện câu lệnh UPDATE vào CSDL
     const query = `
       UPDATE DICH_VU 
-      SET DV_TEN = ?, DV_GIA = ?, DV_TRANGTHAI = ?, DV_MOTA = ?
+      SET DV_TEN = ?, DV_GIA = ?, DV_TRANGTHAI = ?, DV_MOTA = ?, DV_ANH = ?
       WHERE DV_ID = ?
     `;
 
-    await db.query(query, [title, price, status || "active", description, id]);
+    await db.query(query, [
+      title,
+      price,
+      status || "active",
+      description,
+      thumbnail,
+      id,
+    ]);
 
     req.flash("success", "Cập nhật dịch vụ thành công!");
     res.redirect("/admin/services");

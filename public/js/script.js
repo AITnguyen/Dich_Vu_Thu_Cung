@@ -132,3 +132,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Xử lý hiển thị hộp thoại xem thông tin chi tiết dịch vụ
+document.addEventListener("DOMContentLoaded", () => {
+  const buttonsDetail = document.querySelectorAll("[button-detail]");
+
+  if (buttonsDetail.length > 0) {
+    buttonsDetail.forEach((button) => {
+      button.addEventListener("click", () => {
+        // Lấy dữ liệu từ các thuộc tính data-* trên nút bấm
+        const title = button.getAttribute("data-title");
+        const price = button.getAttribute("data-price");
+        const description = button.getAttribute("data-description");
+        const status = button.getAttribute("data-status");
+        const thumbnail = button.getAttribute("data-thumbnail");
+
+        // Sử dụng thư viện SweetAlert2 để hiển thị popup chi tiết đẹp mắt
+        Swal.fire({
+          title: `<span class="text-xl font-bold text-gray-800">${title}</span>`,
+          html: `
+            <div class="text-left space-y-3 mt-3 px-2">
+              <div class="flex justify-center mb-4">
+                <img src="${thumbnail}" alt="Service Image" class="w-32 h-32 object-cover rounded-xl border border-gray-200 shadow-sm" />
+              </div>
+              <div class="bg-gray-50 p-3 rounded-lg space-y-2 border border-gray-100">
+                <p class="text-sm"><strong>Giá dịch vụ:</strong> <span class="text-red-600 font-semibold">${price}</span></p>
+                <p class="text-sm"><strong>Trạng thái:</strong> <span class="font-medium">${status}</span></p>
+                <p class="text-sm"><strong>Mô tả chi tiết:</strong> <span class="text-gray-600">${description}</span></p>
+              </div>
+            </div>
+          `,
+          confirmButtonText: "Đóng",
+          confirmButtonColor: "#3085d6",
+          customClass: {
+            popup: "rounded-2xl",
+          },
+        });
+      });
+    });
+  }
+});
