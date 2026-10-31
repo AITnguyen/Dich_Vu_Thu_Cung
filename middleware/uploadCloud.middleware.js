@@ -1,20 +1,18 @@
-const multer = require("multer");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
 
-// Cấu hình nơi lưu trữ và tên file trên ổ đĩa
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Đảm bảo thư mục public/uploads đã tồn tại trong dự án của bạn
-    cb(null, "./public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    // Tạo tên file độc nhất bằng cách kết hợp thời gian hiện tại và tên gốc
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// Xuất middleware xử lý 1 file có tên field là "thumbnail"
-module.exports.upload = upload.single("thumbnail");
+module.exports.upload = async (req, res, next) => {
+  if (req.file) {
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      // Gán đúng đường dẫn tuyệt đối từ Cloudinary trả về
+      req.body.thumbnail = result.secure_url;
+    } catch (error) {
+      console.log("Lỗi upload ảnh lên Cloudinary:", error);
+      req.body.thumbnail = "";
+    }
+  } else {
+    // Nếu không chọn file mới, giữ nguyên hoặc để trống tùy ngữ cảnh
+    req.body.thumbnail = req.body.thumbnail || "";
+  }
+  next();
+};

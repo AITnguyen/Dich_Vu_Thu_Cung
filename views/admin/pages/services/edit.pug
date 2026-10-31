@@ -4,11 +4,12 @@ block main
   //- Tiêu đề trang
   h3(class="text-2xl font-bold mb-6 font-inter text-p-900") Chỉnh sửa Dịch vụ
 
-  //- Khung chứa form chỉnh sửa
+  //- Khung chứa form chỉnh sửa (Đã thêm enctype="multipart/form-data" và ?_method=PATCH)
   div(class="bg-white rounded-lg shadow p-6 max-w-3xl")
     form(
-      action=`/admin/services/edit/${service.DV_ID}`
+      action=`/admin/services/edit/${service.DV_ID}?_method=PATCH`
       method="POST"
+      enctype="multipart/form-data"
       class="space-y-4"
     )
       div
@@ -22,7 +23,7 @@ block main
         )
         if service.DV_ANH
           div
-            label(class="block text-sm font-semibold text-n-700 mb-1" for="thumbnail") Ảnh hiện tại:
+            label(class="block text-sm font-semibold text-n-700 mb-1") Ảnh hiện tại:
             img(src=service.DV_ANH, alt="Service", class="w-20 h-20 object-cover rounded-lg border")
 
       //- Tên dịch vụ
@@ -83,7 +84,7 @@ block main
           placeholder="Nhập mô tả..."
         ) #{service.DV_MOTA}
 
-      //- Cụm nút Hủy và Cập nhật (giống hệt create.pug)
+      //- Cụm nút Hủy và Cập nhật
       div(class="flex justify-end items-center gap-3 pt-4")
         a(
           href="/admin/services"
