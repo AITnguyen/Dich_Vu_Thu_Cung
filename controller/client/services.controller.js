@@ -30,7 +30,7 @@ module.exports.index = async (req, res) => {
       price: Number(item.DV_GIA).toLocaleString("vi-VN") + " VND / lượt",
       category: item.DV_MOTA,
       location: "Chi nhánh Ninh Kiều, Cần Thơ",
-      thumbnail: "/image/thumbnail.jpg",
+      thumbnail: item.DV_ANH || "/image/thumbnail.jpg",
     }));
 
     res.render("client/pages/services/index", {
