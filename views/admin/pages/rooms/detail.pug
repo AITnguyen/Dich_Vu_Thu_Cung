@@ -1,0 +1,64 @@
+extends ../../layout/default.pug
+
+block main
+  .mb-6.flex.items-center.justify-between
+    h3(class="text-2xl font-bold font-inter text-p-900")
+      | Chi tiết phòng lưu trú
+
+    a(
+      href="/admin/rooms"
+      class="px-5 py-2 bg-n-200 hover:bg-n-300 text-n-800 rounded-lg font-semibold transition-all no-underline"
+    ) Quay lại
+
+  div(class="bg-white rounded-xl shadow-sm border border-n-200 p-6 max-w-4xl mx-auto")
+    //- Ảnh nhỏ hơn và căn giữa trang
+    div(class="flex justify-center mb-6")
+      img(
+        src=room.PHONG_ANH || "/image/thumbnail.jpg"
+        alt=room.PHONG_TEN
+        class="w-full max-w-md h-64 object-cover rounded-xl border border-n-200"
+      )
+
+    //- Các thông tin được tách riêng thành từng ô
+    div(class="grid grid-cols-1 sm:grid-cols-2 gap-4")
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Tên phòng
+        p(class="text-lg font-semibold text-n-800")= room.PHONG_TEN
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Sức chứa
+        p(class="text-lg font-semibold text-n-800")
+          | #{room.PHONG_SL} thú cưng
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Giá mỗi ngày
+        p(class="text-lg font-semibold text-n-800")
+          | #{formattedPrice}
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Trạng thái
+        if room.PHONG_TRANGTHAI === "active"
+          p(class="text-lg font-semibold text-n-800") Hoạt động
+        else
+          p(class="text-lg font-semibold text-n-800") Dừng hoạt động
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Ngày tạo
+        p(class="text-lg font-semibold text-n-800")
+          = room.PHONG_NGAYTAO || "—"
+
+      div(class="bg-p-50 rounded-lg p-4 sm:col-span-2")
+        p(class="text-sm text-n-500 mb-1") Mô tả
+        p(class="text-n-800 whitespace-pre-line")
+          = room.PHONG_MOTA || "Chưa có mô tả."
+
+    div(class="flex justify-center gap-3 mt-6")
+      a(
+        href="/admin/rooms"
+        class="px-5 py-2 bg-n-200 hover:bg-n-300 text-n-800 rounded-lg font-semibold transition-all no-underline"
+      ) Quay lại
+
+      a(
+        href=`/admin/rooms/edit/${room.PHONG_ID}`
+        class="px-5 py-2 btn-2 no-underline font-semibold"
+      ) Sửa phòng

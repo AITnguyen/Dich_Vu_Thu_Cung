@@ -13,22 +13,28 @@ module.exports.PHONG_LUU_TRU = async () => {
     PHONG_NGAYTAO LONGTEXT
   )
   `;
+
   try {
-    await db.query(q);
+    await db.query(query);
     console.log("Tao bang PHONG_LUU_TRU thanh cong");
   } catch (error) {
-    console.log("Tao bang PHONG_LUU_TRU that bai");
+    console.log("Tao bang PHONG_LUU_TRU that bai:", error.message);
   }
 };
 
 // Xoa phong
+// Xóa phòng chưa có lịch lưu trú
 module.exports.DELETE = async (id) => {
-  try {
-    const [result] = await db.query("DELETE FROM PHONG WHERE PHONG_ID = ?", [
-      id,
-    ]);
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  const [result] = await db.query(
+    `DELETE FROM PHONG
+     WHERE PHONG_ID = ?
+       AND NOT EXISTS (
+         SELECT 1
+         FROM SU_DUNG_PHONG
+         WHERE PHONG_ID = ?
+       )`,
+    [id, id],
+  );
+
+  return result;
 };

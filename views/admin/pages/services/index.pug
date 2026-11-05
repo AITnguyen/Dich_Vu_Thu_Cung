@@ -48,7 +48,7 @@ block main
                 .flex.items-center.gap-2
                   //- Nút Xem chi tiết chứa icon circle-info (đặt bên trái nút Sửa)
                   button(
-                    class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white transition-colors no-underline"
+                    class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white"
                     button-detail
                     data-title=item.title
                     data-price=item.price
@@ -60,7 +60,7 @@ block main
                     span Chi tiết
 
                   //- Nút Sửa
-                  a(href=`/admin/services/edit/${item.id}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white transition-colors no-underline") Sửa
+                  a(href=`/admin/services/edit/${item.id}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white") Sửa
                   
                   //- Nút Xóa
                   form(
