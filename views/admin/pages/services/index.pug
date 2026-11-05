@@ -3,20 +3,28 @@ include ../../mixins/filter-status.pug
 include ../../mixins/pagination.pug
 
 block main
-  //- Tiêu đề trang
   .mb-6
-    h1.text-2xl.font-bold.text-n-800 Quản lý Dịch vụ Thú Cưng
+    h1.text-2xl.font-bold.text-n-800 Quản lý Dịch vụ Thú cưng
 
-  //- Hàng chứa Bộ lọc trạng thái (bên trái) và Nút Thêm mới (bên phải)
+  if successMessage
+    div(class="mb-4 p-4 text-sm text-green-700 bg-green-100 border border-green-300 rounded-lg")
+      = successMessage
+
+  if errorMessage
+    div(class="mb-4 p-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded-lg")
+      = errorMessage
+
   .flex.justify-between.items-center.mb-6
     .flex.items-center.gap-2
       +filterStatus(filterStatus)
-    
-    a(href="/admin/services/create", class="btn-2 no-underline flex items-center gap-2")
-      i.fa-solid.fa-plus
-      span Tạo Dịch Vụ Mới
 
-  //- Bảng hiển thị danh sách dịch vụ
+    a(
+      href="/admin/services/create"
+      class="btn-2 no-underline flex items-center gap-2"
+    )
+      i.fa-solid.fa-plus
+      span Thêm dịch vụ
+
   .card.bg-white.rounded-xl.shadow-sm.border.border-n-200.overflow-hidden
     table.table-admin
       thead
@@ -34,50 +42,52 @@ block main
             - var limit = 5
             tr
               td.font-semibold #{(currentPage - 1) * limit + index + 1}
-              td 
-                img(src=item.thumbnail || "/image/thumbnail.jpg", alt="Service", style="width: 60px; height: 60px; object-fit: cover;" class="rounded-lg border border-n-200")
+              td
+                img(
+                  src=item.thumbnail || "/image/thumbnail.jpg"
+                  alt="Dịch vụ"
+                  style="width: 60px; height: 60px; object-fit: cover;"
+                  class="rounded-lg border border-n-200"
+                )
               td.font-semibold.text-n-800 #{item.title}
               td.text-p-500.font-semibold #{item.price}
-              //- Đã xóa ô hiển thị mô tả trong từng dòng
               td(style="white-space: nowrap;")
-                if item.status === 'active'
-                  span(style="background-color: #16a34a; color: white;" class="px-3 py-2 rounded-lg text-xs font-semibold inline-block") Hoạt động
+                if item.status === "active"
+                  span(
+                    style="background-color: #16a34a; color: white;"
+                    class="px-3 py-2 rounded-lg text-xs font-semibold inline-block"
+                  ) Hoạt động
                 else
-                  span(style="background-color: #d14b43; color: white;" class="px-3 py-2 rounded-lg text-xs font-semibold inline-block") Dừng hoạt động
+                  span(
+                    style="background-color: #d14b43; color: white;"
+                    class="px-3 py-2 rounded-lg text-xs font-semibold inline-block"
+                  ) Dừng hoạt động
               td(style="white-space: nowrap;")
                 .flex.items-center.gap-2
-                  //- Nút Xem chi tiết chứa icon circle-info (đặt bên trái nút Sửa)
-                  button(
+                  a(
+                    href=`/admin/services/detail/${item.id}`
                     class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white"
-                    button-detail
-                    data-title=item.title
-                    data-price=item.price
-                    data-description=item.description || "Chưa có mô tả"
-                    data-status=item.status === 'active' ? 'Hoạt động' : 'Dừng hoạt động'
-                    data-thumbnail=item.thumbnail
                   )
-                    wa-icon(name="circle-info")
-                    span Chi tiết
+                    span.ml-1 Chi tiết
 
-                  //- Nút Sửa
-                  a(href=`/admin/services/edit/${item.id}`, class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white") Sửa
-                  
-                  //- Nút Xóa
+                  a(
+                    href=`/admin/services/edit/${item.id}`
+                    class="px-3 py-1.5 bg-p-100 text-p-700 rounded-lg font-semibold hover:bg-p-500 hover:text-white"
+                  ) Sửa
+
                   form(
                     action=`/admin/services/delete/${item.id}`
                     method="POST"
-                    class="inline-block form-delete"
+                    class="inline-block"
                   )
                     button(
                       type="button"
                       button-delete
-                      class="px-3 py-1.5 bg-red-500 hover:bg-p-100 text-danger-500 rounded-lg font-semibold transition-all cursor-pointer"
+                      class="px-3 py-1.5 bg-red-100 text-danger-500 rounded-lg text-xs font-semibold hover:bg-red-200 transition-colors cursor-pointer"
                     ) Xóa
-               
         else
           tr
-            //- Giảm colspan xuống 6 do đã bỏ cột mô tả
-            td(colspan="6" class="text-center py-8 text-n-500") Không có dịch vụ nào được tìm thấy.
+            td(colspan="6" class="text-center py-8 text-n-500")
+              | Không có dịch vụ nào được tìm thấy.
 
-  //- Gọi Mixin Phân Trang ở phía dưới bảng
   +pagination(pagination)

@@ -1,0 +1,56 @@
+extends ../../layout/default.pug
+
+block main
+  .mb-6.flex.items-center.justify-between
+    h3(class="text-2xl font-bold font-inter text-p-900")
+      | Chi tiết dịch vụ
+
+    a(
+      href="/admin/services"
+      class="px-5 py-2 bg-n-200 hover:bg-n-300 text-n-800 rounded-lg font-semibold transition-all no-underline"
+    ) Quay lại
+
+  div(class="bg-white rounded-xl shadow-sm border border-n-200 p-6 max-w-4xl mx-auto")
+    div(class="flex justify-center mb-6")
+      img(
+        src=service.DV_ANH || "/image/thumbnail.jpg"
+        alt=service.DV_TEN
+        class="w-full max-w-md h-64 object-cover rounded-xl border border-n-200"
+      )
+
+    div(class="grid grid-cols-1 sm:grid-cols-2 gap-4")
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Tên dịch vụ
+        p(class="text-lg font-semibold text-n-800")= service.DV_TEN
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Giá dịch vụ
+        p(class="text-lg font-semibold text-n-800") #{formattedPrice}
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Trạng thái
+        if service.DV_TRANGTHAI === "active"
+          p(class="text-lg font-semibold text-n-800") Hoạt động
+        else
+          p(class="text-lg font-semibold text-n-800") Dừng hoạt động
+
+      div(class="bg-p-50 rounded-lg p-4")
+        p(class="text-sm text-n-500 mb-1") Ngày tạo
+        p(class="text-lg font-semibold text-n-800")
+          = service.DV_NGAYTAO || "—"
+
+      div(class="bg-p-50 rounded-lg p-4 sm:col-span-2")
+        p(class="text-sm text-n-500 mb-1") Mô tả
+        p(class="text-n-800 whitespace-pre-line")
+          = service.DV_MOTA || "Chưa có mô tả."
+
+    div(class="flex justify-center gap-3 mt-6")
+      a(
+        href="/admin/services"
+        class="px-5 py-2 bg-n-200 hover:bg-n-300 text-n-800 rounded-lg font-semibold transition-all no-underline"
+      ) Quay lại
+
+      a(
+        href=`/admin/services/edit/${service.DV_ID}`
+        class="px-5 py-2 btn-2 no-underline font-semibold"
+      ) Sửa dịch vụ

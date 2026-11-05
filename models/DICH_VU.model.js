@@ -13,23 +13,27 @@ module.exports.DICH_VU = async () => {
     DV_NGAYTAO LONGTEXT
   )
   `;
+
   try {
-    await db.query(q);
+    await db.query(query);
     console.log("Tao bang DICH_VU thanh cong");
   } catch (error) {
     console.log("Tao bang DICH_VU that bai:", error.message);
   }
 };
 
-// Hàm xóa dịch vụ (Đã sửa P_ID thành DV_ID)
+// Chỉ xóa dịch vụ chưa có lịch sử sử dụng
 module.exports.DELETE = async (id) => {
-  let q = `
-  DELETE FROM DICH_VU
-  WHERE DV_ID = ?
-  `;
-  try {
-    await db.query(q, [id]);
-  } catch (error) {
-    throw error;
-  }
+  const [result] = await db.query(
+    `DELETE FROM DICH_VU
+     WHERE DV_ID = ?
+       AND NOT EXISTS (
+         SELECT 1
+         FROM SU_DUNG_DICH_VU
+         WHERE DV_ID = ?
+       )`,
+    [id, id],
+  );
+
+  return result;
 };

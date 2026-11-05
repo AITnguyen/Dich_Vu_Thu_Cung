@@ -81,11 +81,11 @@ block main
                     action=`/admin/rooms/delete/${room.id}`
                     method="POST"
                     class="inline-block"
-                    onsubmit="return confirm('Bạn chắc chắn muốn xóa phòng này? Phòng đã có lịch lưu trú sẽ không thể xóa.');"
                   )
                     button(
-                      type="submit"
-                      class="px-3 py-1.5 bg-red-500 hover:bg-p-100 text-danger-500 rounded-lg font-semibold transition-all cursor-pointer"
+                      type="button"
+                      button-delete
+                      class="px-3 py-1.5 bg-red-100 text-danger-500 rounded-lg text-xs font-semibold hover:bg-red-200 transition-colors cursor-pointer"
                     ) Xóa
         else
           tr
