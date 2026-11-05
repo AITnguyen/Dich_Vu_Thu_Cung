@@ -1,14 +1,21 @@
-mixin alert-success(time)
-  - if (messages.success)
+mixin flash-toast(message, type, time)
+  if message
+    - var isError = type === "error"
+    - var borderColor = isError ? "#fca5a5" : "#86efac"
+    - var textColor = isError ? "#b91c1c" : "#166534"
+
     div(
-      class="mb-4 p-4 text-sm text-green-700 bg-green-100 border border-green-300 rounded-lg flex items-center justify-between shadow-sm transition-all duration-300"
+      style=`position: fixed; top: 75px; left: 50%; transform: translateX(-50%); z-index: 9999; width: min(700px, calc(100vw - 32px)); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; border: 1px solid ${borderColor}; border-radius: 8px; background-color: #ffffff; opacity: 1; color: ${textColor}; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);`
       role="alert"
+      show-alert=""
+      data-time=(time || 3000)
     )
-      div(class="flex items-center gap-2")
-        span(class="font-semibold") Thành công:
-        span #{messages.success}
+      span= message
       button(
         type="button"
-        class="text-green-700 hover:text-green-900 font-bold text-lg leading-none cursor-pointer"
-        onclick="this.parentElement.style.display='none';"
+        style="border: 0; background: transparent; color: inherit; font-size: 22px; line-height: 1; cursor: pointer;"
+        onclick="this.parentElement.classList.add('hidden');"
       ) &times;
+
+mixin alert-success(time)
+  +flash-toast(messages.success, "success", time)
