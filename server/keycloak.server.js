@@ -1,32 +1,134 @@
 const axios = require("axios");
 
-const {
-  KEYCLOAK_URL,
-  KEYCLOAK_REALM,
-  KEYCLOAK_CLIENT_ID,
-  KEYCLOAK_CLIENT_SECRET,
-} = process.env;
+function config() {
+  const url = String(process.env.KEYCLOAK_URL || "").replace(/\/+$/, "");
+  const realm = process.env.KEYCLOAK_REALM;
+  const clientId = process.env.KEYCLOAK_CLIENT_ID;
+  const clientSecret = process.env.KEYCLOAK_CLIENT_SECRET;
 
-async function getTokenAdmin() {
-  const res = await axios.post(
-    `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`,
-    new URLSearchParams({
-      grant_type: "client_credentials",
-      client_id: KEYCLOAK_CLIENT_ID,
-      client_secret: KEYCLOAK_CLIENT_SECRET,
-    }),
-    { headers: { "Content-Type": "application/x-www-form-urlencoded" } },
-  );
+  if (!url || !realm || !clientId || !clientSecret) {
+    throw new Error(
+      "Thiếu KEYCLOAK_URL, KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID hoặc KEYCLOAK_CLIENT_SECRET",
+    );
+  }
 
-  return res.data.access_token;
+  return { url, realm, clientId, clientSecret };
 }
 
-module.exports.createUser = async (data, roles) => {
-  const token = await getTokenAdmin();
+function realmUrl() {
+  const value = config();
+  return value.url + "/realms/" + encodeURIComponent(value.realm);
+}
 
-  // create user
+function adminUrl() {
+  const value = config();
+  return value.url + "/admin/realms/" + encodeURIComponent(value.realm);
+}
+
+async function postForm(url, values) {
+  const response = await axios.post(url, new URLSearchParams(values), {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+  return response.data;
+}
+
+async function getAdminToken() {
+  const value = config();
+  const data = await postForm(realmUrl() + "/protocol/openid-connect/token", {
+    grant_type: "client_credentials",
+    client_id: value.clientId,
+    client_secret: value.clientSecret,
+  });
+  return data.access_token;
+}
+
+async function adminHeaders() {
+  return { Authorization: "Bearer " + (await getAdminToken()) };
+}
+
+module.exports.login = async (email, password) => {
+  const value = config();
+  return postForm(realmUrl() + "/protocol/openid-connect/token", {
+    grant_type: "password",
+    client_id: value.clientId,
+    client_secret: value.clientSecret,
+    username: email,
+    password,
+    scope: "openid",
+  });
+};
+
+module.exports.statusToken = async (accessToken) => {
+  const value = config();
+  return postForm(realmUrl() + "/protocol/openid-connect/token/introspect", {
+    client_id: value.clientId,
+    client_secret: value.clientSecret,
+    token: accessToken,
+    token_type_hint: "access_token",
+  });
+};
+
+module.exports.refreshToken = async (refreshToken) => {
+  const value = config();
+  return postForm(realmUrl() + "/protocol/openid-connect/token", {
+    grant_type: "refresh_token",
+    client_id: value.clientId,
+    client_secret: value.clientSecret,
+    refresh_token: refreshToken,
+  });
+};
+
+module.exports.logout = async (refreshToken) => {
+  const value = config();
+  return postForm(realmUrl() + "/protocol/openid-connect/logout", {
+    client_id: value.clientId,
+    client_secret: value.clientSecret,
+    refresh_token: refreshToken,
+  });
+};
+
+module.exports.checkUsername = async (email) => {
+  const response = await axios.get(adminUrl() + "/users", {
+    params: { username: email, exact: true },
+    headers: await adminHeaders(),
+  });
+  return response.data || [];
+};
+
+module.exports.getRealmRoles = async (userId) => {
+  const response = await axios.get(
+    adminUrl() +
+      "/users/" +
+      encodeURIComponent(userId) +
+      "/role-mappings/realm",
+    { headers: await adminHeaders() },
+  );
+  return response.data || [];
+};
+
+module.exports.setRole = async (userId, roleName) => {
+  const roleResponse = await axios.get(
+    adminUrl() + "/roles/" + encodeURIComponent(roleName),
+    { headers: await adminHeaders() },
+  );
+
+  await axios.post(
+    adminUrl() +
+      "/users/" +
+      encodeURIComponent(userId) +
+      "/role-mappings/realm",
+    [roleResponse.data],
+    {
+      headers: Object.assign(await adminHeaders(), {
+        "Content-Type": "application/json",
+      }),
+    },
+  );
+};
+
+module.exports.createUser = async (data, roleName) => {
   const response = await axios.post(
-    `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users`,
+    adminUrl() + "/users",
     {
       username: data.email,
       email: data.email,
@@ -34,230 +136,59 @@ module.exports.createUser = async (data, roles) => {
       enabled: true,
       emailVerified: true,
       credentials: [
-        {
-          type: "password",
-          value: data.password,
-          temporary: false,
-        },
+        { type: "password", value: data.password, temporary: false },
       ],
     },
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
+      headers: Object.assign(await adminHeaders(), {
         "Content-Type": "application/json",
-      },
+      }),
     },
   );
 
-  // role
+  let userId = "";
   const location = response.headers.location;
-  const userId = location.split("/").pop();
+  if (location) userId = location.split("/").pop();
 
-  const responseRole = await axios.get(
-    `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/roles/${roles}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+  if (!userId) {
+    const users = await module.exports.checkUsername(data.email);
+    userId = users[0] && users[0].id;
+  }
 
-  const role = responseRole.data;
+  if (!userId) throw new Error("Keycloak không trả về ID tài khoản mới");
 
-  await axios.post(
-    `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users/${userId}/role-mappings/realm`,
-    [role],
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    },
-  );
+  try {
+    await module.exports.setRole(userId, roleName);
+  } catch (error) {
+    await module.exports.deleteUser(userId).catch(() => {});
+    throw error;
+  }
+
   return userId;
 };
 
-module.exports.login = async (email, password) => {
-  const res = await axios.post(
-    `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`,
-    new URLSearchParams({
-      grant_type: "password",
-      client_id: KEYCLOAK_CLIENT_ID,
-      client_secret: KEYCLOAK_CLIENT_SECRET,
-      username: email,
-      password: password,
-      scope: "openid",
-    }),
+module.exports.resetPassword = async (userId, newPassword) => {
+  await axios.put(
+    adminUrl() + "/users/" + encodeURIComponent(userId) + "/reset-password",
+    { type: "password", value: newPassword, temporary: false },
     {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    },
-  );
-  return res.data;
-};
-
-module.exports.statusToken = async (access_token) => {
-  try {
-    const token = await axios.post(
-      `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token/introspect`,
-      new URLSearchParams({
-        client_id: KEYCLOAK_CLIENT_ID,
-        client_secret: KEYCLOAK_CLIENT_SECRET,
-        token: access_token,
-        token_type_hint: "access_token",
-      }),
-      {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      },
-    );
-    return token.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports.refreshToken = async (refresh_token) => {
-  try {
-    const token = await axios.post(
-      `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`,
-      new URLSearchParams({
-        grant_type: "refresh_token",
-        client_id: KEYCLOAK_CLIENT_ID,
-        client_secret: KEYCLOAK_CLIENT_SECRET,
-        refresh_token: refresh_token,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      },
-    );
-    return token.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports.logout = async (refresh_token) => {
-  try {
-    await axios.post(
-      `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/logout`,
-      new URLSearchParams({
-        client_id: KEYCLOAK_CLIENT_ID,
-        client_secret: KEYCLOAK_CLIENT_SECRET,
-        refresh_token: refresh_token,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports.resetPassword = async (id_user, new_password) => {
-  try {
-    const tokenAdmin = await getTokenAdmin();
-    await axios.put(
-      `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users/${id_user}/reset-password`,
-
-      {
-        type: "password",
-        value: new_password,
-        temporary: false,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${tokenAdmin}`,
-          "Content-type": "application/json",
-        },
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports.changeStatus = async (id_keycloak, status) => {
-  try {
-    const tokenAdmin = await getTokenAdmin();
-    await axios.put(
-      `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users/${id_keycloak}`,
-      { enabled: status },
-      {
-        headers: {
-          Authorization: `Bearer ${tokenAdmin}`,
-          "Content-type": "application/json",
-        },
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports.deleteUser = async (id_keycloak) => {
-  try {
-    const tokenAdmin = await getTokenAdmin();
-    await axios.delete(
-      `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users/${id_keycloak}`,
-      {
-        headers: {
-          Authorization: `Bearer ${tokenAdmin}`,
-          "Content-type": "application/json",
-        },
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports.checkUsername = async (username) => {
-  const token = await getTokenAdmin();
-
-  const { data } = await axios.get(
-    `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users`,
-    {
-      params: {
-        username: username,
-        exact: true,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  return data;
-};
-
-module.exports.setRole = async (userId, roles) => {
-  const token = await getTokenAdmin();
-
-  const responseRole = await axios.get(
-    `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/roles/${roles}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  const role = responseRole.data;
-
-  await axios.post(
-    `${KEYCLOAK_URL}/admin/realms/${KEYCLOAK_REALM}/users/${userId}/role-mappings/realm`,
-    [role],
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+      headers: Object.assign(await adminHeaders(), {
         "Content-Type": "application/json",
-      },
+      }),
     },
   );
+};
+
+module.exports.logoutUserSessions = async (userId) => {
+  await axios.post(
+    adminUrl() + "/users/" + encodeURIComponent(userId) + "/logout",
+    {},
+    { headers: await adminHeaders() },
+  );
+};
+
+module.exports.deleteUser = async (userId) => {
+  await axios.delete(adminUrl() + "/users/" + encodeURIComponent(userId), {
+    headers: await adminHeaders(),
+  });
 };

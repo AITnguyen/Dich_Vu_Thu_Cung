@@ -15,7 +15,7 @@ module.exports.PHONG_LUU_TRU = async () => {
   `;
 
   try {
-    await db.query(query);
+    await db.query(q);
     console.log("Tao bang PHONG_LUU_TRU thanh cong");
   } catch (error) {
     console.log("Tao bang PHONG_LUU_TRU that bai:", error.message);

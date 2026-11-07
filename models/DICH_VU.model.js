@@ -15,7 +15,7 @@ module.exports.DICH_VU = async () => {
   `;
 
   try {
-    await db.query(query);
+    await db.query(q);
     console.log("Tao bang DICH_VU thanh cong");
   } catch (error) {
     console.log("Tao bang DICH_VU that bai:", error.message);
