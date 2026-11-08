@@ -7,7 +7,9 @@ const authSession = require("../../helper/authSession.helper");
 const CUSTOMER_ROLE = process.env.KEYCLOAK_ROLE_CUSTOMER || "KHACH_HANG";
 
 function cleanEmail(value) {
-  return String(value || "").trim().toLowerCase();
+  return String(value || "")
+    .trim()
+    .toLowerCase();
 }
 
 function validEmail(value) {
@@ -23,12 +25,7 @@ function showAuthPage(res, view, pageTitle, req) {
 }
 
 module.exports.signin = (req, res) =>
-  showAuthPage(
-    res,
-    "client/pages/auth/signin",
-    "Đăng nhập tài khoản",
-    req,
-  );
+  showAuthPage(res, "client/pages/auth/signin", "Đăng nhập tài khoản", req);
 
 module.exports.signinPost = async (req, res) => {
   const email = cleanEmail(req.body.email);
@@ -38,7 +35,10 @@ module.exports.signinPost = async (req, res) => {
   try {
     const user = await KhachHang.SELECT_KH("KH_EMAIL", email);
     if (!user || user.KH_TRANGTHAI !== "active") {
-      req.flash("error", "Email hoặc mật khẩu không đúng, hoặc tài khoản đã khóa.");
+      req.flash(
+        "error",
+        "Email hoặc mật khẩu không đúng, hoặc tài khoản đã khóa.",
+      );
       return res.redirect("/auth/signin");
     }
 
@@ -81,19 +81,19 @@ module.exports.signinPost = async (req, res) => {
     return res.redirect("/");
   } catch (error) {
     if (refreshToken) await keycloak.logout(refreshToken).catch(() => {});
-    console.error("Lỗi đăng nhập khách hàng:", error.message);
+    console.error("Lỗi đăng nhập khách hàng:", {
+      message: error.message,
+      status: error.response?.status,
+      url: error.config?.url,
+      keycloakError: error.response?.data,
+    });
     req.flash("error", "Email hoặc mật khẩu không đúng.");
     return res.redirect("/auth/signin");
   }
 };
 
 module.exports.signup = (req, res) =>
-  showAuthPage(
-    res,
-    "client/pages/auth/signup",
-    "Đăng ký tài khoản",
-    req,
-  );
+  showAuthPage(res, "client/pages/auth/signup", "Đăng ký tài khoản", req);
 
 module.exports.signupPost = async (req, res) => {
   const fullName = String(req.body.fullName || "").trim();
@@ -126,7 +126,10 @@ module.exports.signupPost = async (req, res) => {
       return res.redirect("/auth/signup");
     }
     if ((await keycloak.checkUsername(email)).length > 0) {
-      req.flash("error", "Email đã có tài khoản. Hãy đăng nhập hoặc khôi phục mật khẩu.");
+      req.flash(
+        "error",
+        "Email đã có tài khoản. Hãy đăng nhập hoặc khôi phục mật khẩu.",
+      );
       return res.redirect("/auth/signin");
     }
 
@@ -241,8 +244,16 @@ module.exports.signupVerify = async (req, res) => {
         expiresAt: Date.now() + tokens.expires_in * 1000,
       });
     } catch (error) {
-      console.error("Tài khoản đã tạo nhưng chưa tự đăng nhập được:", error.message);
-      req.flash("success", "Tạo tài khoản thành công. Hãy đăng nhập để tiếp tục.");
+      console.error("Tài khoản đã tạo nhưng chưa tự đăng nhập được:", {
+        message: error.message,
+        status: error.response?.status,
+        url: error.config?.url,
+        keycloakError: error.response?.data,
+      });
+      req.flash(
+        "success",
+        "Tạo tài khoản thành công. Hãy đăng nhập để tiếp tục.",
+      );
       return res.redirect("/auth/signin");
     }
 
