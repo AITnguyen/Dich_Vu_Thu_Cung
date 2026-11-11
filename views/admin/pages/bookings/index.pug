@@ -12,49 +12,73 @@ block main
     table(class="w-full min-w-[1100px] text-left")
       thead(class="border-b bg-gray-50")
         tr
+          th(class="p-3") Mã
           th(class="p-3") Loại
           th(class="p-3") Khách hàng
           th(class="p-3") Thú cưng
           th(class="p-3") Dịch vụ / Phòng
           th(class="p-3") Ngày
           th(class="p-3") Tiền
-          th(class="p-3") Trạng thái lịch
+          th(class="p-3") Trạng thái
           th(class="p-3") Thanh toán
           th(class="p-3") Thao tác
       tbody
-        each booking in bookings
-          tr(class="border-b")
-            td(class="p-3")= booking.type === "services" ? "Dịch vụ" : "Lưu trú"
-            td(class="p-3")= booking.customerName
-            td(class="p-3")= booking.petName
-            td(class="p-3")= booking.itemName
-            td(class="p-3")
-              | #{booking.startAt}
-              if booking.endAt
-                |  đến #{booking.endAt}
-            td(class="p-3")= booking.amountText
-            td(class="p-3")= booking.bookingStatus || "ChoXacNhan"
-            td(class="p-3")
-              | #{booking.paymentMethod}
-              |  / #{booking.paymentStatus}
-            td(class="p-3")
-              if booking.bookingStatus === "ChoXacNhan"
-                form(
-                  action=`/admin/bookings/${booking.type}/${booking.id}/approve`
-                  method="POST"
-                  class="mb-2"
-                )
-                  button(type="submit" class="rounded bg-green-600 px-3 py-2 text-white") Duyệt
-                form(
-                  action=`/admin/bookings/${booking.type}/${booking.id}/reject`
-                  method="POST"
-                )
-                  button(type="submit" class="rounded bg-red-600 px-3 py-2 text-white") Từ chối
-              else if booking.bookingStatus === "DaXacNhan" && booking.paymentMethod === "TienMat" && booking.paymentStatus !== "DaThanhToan"
-                form(
-                  action=`/admin/bookings/${booking.type}/${booking.id}/cash-paid`
-                  method="POST"
-                )
-                  button(type="submit" class="rounded bg-[#4A3525] px-3 py-2 text-white") Ghi nhận tiền mặt
-              else
-                span(class="text-gray-500") —
+        if bookings && bookings.length > 0
+          each booking in bookings
+            tr(class="border-b")
+              td(class="p-3")= booking.id
+              td(class="p-3")= booking.type === "services" ? "Dịch vụ" : "Lưu trú"
+              td(class="p-3")= booking.customerName
+              td(class="p-3")= booking.petName
+              td(class="p-3")= booking.itemName
+              td(class="p-3")
+                | #{booking.startAt || "—"}
+                if booking.endAt
+                  |  đến #{booking.endAt}
+              td(class="p-3")= booking.amountText
+
+              td(class="p-3")
+                if booking.bookingStatus === "ChoXacNhan"
+                  span(class="rounded bg-yellow-100 px-2 py-1 text-yellow-800") Chờ xác nhận
+                else if booking.bookingStatus === "DaXacNhan"
+                  span(class="rounded bg-green-100 px-2 py-1 text-green-800") Đã xác nhận
+                else if booking.bookingStatus === "TuChoi"
+                  span(class="rounded bg-red-100 px-2 py-1 text-red-800") Đã từ chối
+                else
+                  span= booking.bookingStatus || "—"
+
+              td(class="p-3")
+                if booking.paymentStatus === "DaThanhToan"
+                  span(class="text-green-700") Đã thanh toán
+                else
+                  span(class="text-yellow-700") Chưa thanh toán
+
+              td(class="p-3")
+                div(class="flex flex-wrap items-center gap-2")
+                  a(
+                    href=`/admin/bookings/detail/${booking.type}/${booking.id}`
+                    class="rounded bg-p-100 px-3 py-2 font-semibold text-p-700 hover:bg-p-200 no-underline"
+                  ) Chi tiết
+
+                  if booking.bookingStatus === "ChoXacNhan"
+                    form(
+                      action=`/admin/bookings/${booking.type}/${booking.id}/approve`
+                      method="POST"
+                    )
+                      button(type="submit" class="rounded bg-green-600 px-3 py-2 text-white") Duyệt
+
+                    form(
+                      action=`/admin/bookings/${booking.type}/${booking.id}/reject`
+                      method="POST"
+                    )
+                      button(type="submit" class="rounded bg-red-600 px-3 py-2 text-white") Từ chối
+
+                  else if booking.bookingStatus === "DaXacNhan" && booking.paymentMethod === "TienMat" && booking.paymentStatus !== "DaThanhToan"
+                    form(
+                      action=`/admin/bookings/${booking.type}/${booking.id}/cash-paid`
+                      method="POST"
+                    )
+                      button(type="submit" class="rounded bg-[#4A3525] px-3 py-2 text-white") Ghi nhận tiền mặt
+        else
+          tr
+            td(colspan="10" class="p-8 text-center text-gray-500") Chưa có lịch đặt nào.

@@ -1,0 +1,149 @@
+extends ../../layout/default.pug
+
+block main
+  div(class="mb-6 flex items-center justify-between")
+    h1(class="text-2xl font-bold text-p-900") Chi tiết lịch đặt
+    a(
+      href="/admin/bookings"
+      class="rounded-lg bg-p-100 px-4 py-2 font-semibold text-p-700 no-underline hover:bg-p-200"
+    ) Quay lại danh sách
+
+  div(class="grid grid-cols-1 gap-5 lg:grid-cols-2")
+    section(class="rounded-xl border bg-white p-5 shadow-sm")
+      h2(class="mb-4 text-lg font-bold") Thông tin lịch đặt
+      dl(class="space-y-3")
+        div
+          dt(class="text-sm text-gray-500") Mã lịch
+          dd(class="font-semibold")= booking.id
+
+        div
+          dt(class="text-sm text-gray-500") Loại lịch
+          dd(class="font-semibold")= booking.type === "services" ? "Dịch vụ" : "Lưu trú"
+
+        div
+          dt(class="text-sm text-gray-500") Thời gian
+          dd(class="font-semibold")
+            | #{booking.startAt || "—"}
+            if booking.endAt
+              |  đến #{booking.endAt}
+
+        if booking.type === "services"
+          div
+            dt(class="text-sm text-gray-500") Số lượng
+            dd(class="font-semibold")= booking.quantity || 1
+        else
+          div
+            dt(class="text-sm text-gray-500") Số ngày
+            dd(class="font-semibold")= booking.dayCount || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Tổng tiền
+          dd(class="font-semibold text-p-700")= booking.amountText
+
+        div
+          dt(class="text-sm text-gray-500") Trạng thái lịch
+          dd(class="font-semibold")= booking.bookingStatus || "—"
+
+        if booking.type === "rooms"
+          div
+            dt(class="text-sm text-gray-500") Trạng thái lưu trú
+            dd(class="font-semibold")= booking.stayStatus || "—"
+
+    section(class="rounded-xl border bg-white p-5 shadow-sm")
+      h2(class="mb-4 text-lg font-bold") Khách hàng
+      dl(class="space-y-3")
+        div
+          dt(class="text-sm text-gray-500") Họ tên
+          dd(class="font-semibold")= booking.customerName || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Email
+          dd(class="font-semibold")= booking.customerEmail || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Số điện thoại
+          dd(class="font-semibold")= booking.customerPhone || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Địa chỉ
+          dd(class="font-semibold")= booking.customerAddress || "—"
+
+        div
+          dt(class="text-sm text-gray-500") CCCD
+          dd(class="font-semibold")= booking.customerCccd || "—"
+
+    section(class="rounded-xl border bg-white p-5 shadow-sm")
+      h2(class="mb-4 text-lg font-bold") Thú cưng
+      dl(class="space-y-3")
+        div
+          dt(class="text-sm text-gray-500") Tên
+          dd(class="font-semibold")= booking.petName || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Giống
+          dd(class="font-semibold")= booking.petBreed || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Loài
+          dd(class="font-semibold")= booking.petSpecies || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Tuổi
+          dd(class="font-semibold")= booking.petAge == null ? "—" : `${booking.petAge} tuổi`
+
+        div
+          dt(class="text-sm text-gray-500") Cân nặng
+          dd(class="font-semibold")= booking.petWeight == null ? "—" : `${booking.petWeight} kg`
+
+        div
+          dt(class="text-sm text-gray-500") Ghi chú
+          dd(class="whitespace-pre-line")= booking.petNote || "—"
+
+    section(class="rounded-xl border bg-white p-5 shadow-sm")
+      h2(class="mb-4 text-lg font-bold")= booking.type === "services" ? "Thông tin dịch vụ" : "Thông tin phòng"
+      if booking.itemImage
+        img(
+          src=booking.itemImage
+          alt=booking.itemName
+          class="mb-4 h-48 w-full rounded-lg object-cover"
+        )
+
+      dl(class="space-y-3")
+        div
+          dt(class="text-sm text-gray-500") Tên
+          dd(class="font-semibold")= booking.itemName || "—"
+
+        if booking.type === "services"
+          div
+            dt(class="text-sm text-gray-500") Giá niêm yết hiện tại
+            dd(class="font-semibold")= booking.unitPriceText
+          if booking.staffName
+            div
+              dt(class="text-sm text-gray-500") Nhân viên
+              dd(class="font-semibold")= booking.staffName
+        else
+          div
+            dt(class="text-sm text-gray-500") Sức chứa
+            dd(class="font-semibold")= booking.capacity == null ? "—" : `${booking.capacity} thú cưng`
+          div
+            dt(class="text-sm text-gray-500") Giá mỗi ngày
+            dd(class="font-semibold")= booking.unitPriceText
+
+        div
+          dt(class="text-sm text-gray-500") Mô tả
+          dd(class="whitespace-pre-line")= booking.itemDescription || "—"
+
+    section(class="rounded-xl border bg-white p-5 shadow-sm lg:col-span-2")
+      h2(class="mb-4 text-lg font-bold") Thanh toán
+      dl(class="grid grid-cols-1 gap-4 md:grid-cols-3")
+        div
+          dt(class="text-sm text-gray-500") Phương thức
+          dd(class="font-semibold")= booking.paymentMethod || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Trạng thái
+          dd(class="font-semibold")= booking.paymentStatus || "—"
+
+        div
+          dt(class="text-sm text-gray-500") Mã thanh toán
+          dd(class="font-semibold")= booking.paymentCode || "—"
