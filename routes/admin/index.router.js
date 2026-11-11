@@ -4,6 +4,7 @@ const servicesRouter = require("./services.router");
 const roomsRouter = require("./rooms.router");
 const authRouter = require("./auth.router");
 const authMiddleware = require("../../middleware/auth.middleware");
+const bookingsRouter = require("./bookings.router");
 
 module.exports = (app) => {
   const PATH_ADMIN = systemConfig.prefixAdmin;
@@ -19,5 +20,12 @@ module.exports = (app) => {
     authMiddleware.requireAdmin,
     servicesRouter,
   );
+
   app.use(PATH_ADMIN + "/rooms", authMiddleware.requireAdmin, roomsRouter);
+
+  app.use(
+    PATH_ADMIN + "/bookings",
+    authMiddleware.requireAdmin,
+    bookingsRouter,
+  );
 };

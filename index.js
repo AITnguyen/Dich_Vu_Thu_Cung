@@ -23,6 +23,7 @@ app.set("views", "./views");
 app.set("view engine", "pug");
 app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET || sessionSecret));
 
 app.use(

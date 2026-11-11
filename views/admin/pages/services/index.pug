@@ -8,13 +8,10 @@ block main
     h1.text-2xl.font-bold.text-n-800 Quản lý Dịch vụ Thú cưng
 
   if successMessage
-    div(class="mb-4 p-4 text-sm text-green-700 bg-green-100 border border-green-300 rounded-lg"
-    )
-      +flash-toast(successMessage, "success", 3000)
+    +flash-toast(successMessage, "success", 3000)
 
   if errorMessage
-    div(class="mb-4 p-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded-lg")
-      +flash-toast(errorMessage, "error", 3000)
+    +flash-toast(errorMessage, "error", 3000)
 
   .flex.justify-between.items-center.mb-6
     .flex.items-center.gap-2

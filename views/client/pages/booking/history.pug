@@ -1,0 +1,51 @@
+extends ../../layout/default.pug
+
+block main
+  main(class="container mx-auto px-4 py-10")
+    h1(class="mb-6 text-3xl font-bold text-[#4A3525]") Lịch đặt của tôi
+
+    if errorMessage
+      div(class="mb-5 rounded-lg bg-red-100 p-4 text-red-800")= errorMessage
+    if successMessage
+      div(class="mb-5 rounded-lg bg-green-100 p-4 text-green-800")= successMessage
+
+    if bookings.length
+      div(class="overflow-x-auto rounded-2xl bg-white shadow")
+        table(class="w-full min-w-[850px] text-left")
+          thead(class="border-b bg-gray-50")
+            tr
+              th(class="p-4") Loại
+              th(class="p-4") Dịch vụ / Phòng
+              th(class="p-4") Thú cưng
+              th(class="p-4") Ngày
+              th(class="p-4") Tổng tiền
+              th(class="p-4") Trạng thái
+              th(class="p-4") Thanh toán
+          tbody
+            each booking in bookings
+              tr(class="border-b")
+                td(class="p-4")= booking.kind === "service" ? "Dịch vụ" : "Lưu trú"
+                td(class="p-4")= booking.itemName
+                td(class="p-4")= booking.petName
+                td(class="p-4")
+                  | #{booking.dateText}
+                  if booking.endDateText
+                    |  đến #{booking.endDateText}
+                td(class="p-4")= booking.amountText
+                td(class="p-4")= booking.bookingStatus || "ChoXacNhan"
+                td(class="p-4")
+                  if booking.paymentStatus === "DaThanhToan"
+                    span(class="font-semibold text-green-700") Đã thanh toán
+                  else if booking.bookingStatus === "DaXacNhan" && booking.paymentMethod === "SePay"
+                    a(
+                      href=booking.kind === "service"
+                        ? `/booking/pay/services/${booking.id}`
+                        : `/booking/pay/rooms/${booking.id}`
+                      class="rounded-lg bg-[#4A3525] px-3 py-2 text-white no-underline"
+                    ) Thanh toán online
+                  else if booking.paymentMethod === "TienMat"
+                    span Thanh toán trực tiếp sau khi được duyệt
+                  else
+                    span Chờ admin xác nhận
+    else
+      p(class="rounded-xl bg-white p-6 text-gray-600") Bạn chưa có lịch đặt nào.

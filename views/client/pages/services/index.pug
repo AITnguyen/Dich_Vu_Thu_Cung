@@ -27,10 +27,9 @@ block main
                                     
                                     div(class="pt-4 border-t border-n-100")
                                         div(class="flex items-center justify-between mb-3")  
-                                            h2(class="font-inter text-p-700 text-lg font-bold") #{item.price}
-                                            a(href=`/services/detail/${item.id}` class="btn no-underline") Chi tiết
-                                        
-                                        div(class="bg-p-700 p-1 rounded-full mt-2")
-                                            a(href=`/services/booking/${item.id}` class="btn-2 w-full rounded-full no-underline text-center") Đặt Lịch Ngay
+                                            a(
+                                                href=`/booking/services/${item.id}`
+                                                class="btn-2 w-full rounded-full no-underline text-center"
+                                            ) Đặt lịch
                     else
                         .col-span-3.text-center.py-12.text-n-500 Hiện chưa có dịch vụ nào được cập nhật.

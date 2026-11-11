@@ -1,0 +1,33 @@
+extends ../../layout/default.pug
+
+block main
+  main(class="container mx-auto px-4 py-10")
+    h1(class="text-3xl font-bold text-[#4A3525] mb-8") Phòng lưu trú
+
+    if errorMessage
+      div(class="mb-5 rounded-lg bg-red-100 p-4 text-red-800")= errorMessage
+
+    if successMessage
+      div(class="mb-5 rounded-lg bg-green-100 p-4 text-green-800")= successMessage
+
+    if rooms.length
+      div(class="grid grid-cols-1 md:grid-cols-3 gap-6")
+        each room in rooms
+          article(class="overflow-hidden rounded-2xl border bg-white shadow-sm")
+            img(
+              src=room.image
+              alt=room.name
+              class="h-56 w-full object-cover"
+            )
+            div(class="p-5")
+              h2(class="text-xl font-bold text-[#4A3525]")= room.name
+              p(class="mt-2 text-gray-600") Sức chứa: #{room.capacity} thú cưng
+              p(class="mt-2 font-semibold text-[#4A3525]") #{room.price}đ / ngày
+              if room.description
+                p(class="mt-2 text-gray-600")= room.description
+              a(
+                href=`/booking/rooms/${room.id}`
+                class="mt-5 block rounded-xl bg-[#4A3525] px-4 py-3 text-center font-semibold text-white no-underline"
+              ) Đặt phòng
+    else
+      p(class="rounded-xl bg-white p-6 text-gray-600") Hiện chưa có phòng lưu trú đang hoạt động.
