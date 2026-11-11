@@ -33,8 +33,12 @@ block main
 
           button(type="submit" class="mt-2 w-full py-3 bg-[#4A3525] text-white font-bold rounded-xl hover:bg-[#38271a] cursor-pointer") GỬI MÃ XÁC THỰC
 
-        p(class="text-sm text-gray-600 mt-5") Đã có tài khoản?
-          a(href="/auth/signin" class="ml-1 text-amber-800 font-semibold hover:underline") Đăng nhập
+        div(class="mt-5 flex flex-col items-center gap-3 text-center")
+          p(class="text-sm text-gray-600")
+            | Đã có tài khoản?
+            a(href="/auth/signin" class="ml-1 text-amber-800 font-semibold hover:underline") Đăng nhập
+
+          a(href="/" class="text-sm text-gray-600 hover:underline") Về trang chủ
 
       div(class="bg-[#4A3525] p-8 md:p-12 flex flex-col justify-center text-white")
         span(class="text-2xl font-extrabold mb-6") PetCare

@@ -23,9 +23,14 @@ block main
 
           button(type="submit" class="mt-2 w-full py-3 bg-[#4A3525] text-white font-bold rounded-xl hover:bg-[#38271a] cursor-pointer") ĐĂNG NHẬP
 
-        a(href="/auth/forgot-password" class="mt-4 text-sm text-amber-800 hover:underline") Quên mật khẩu?
-        p(class="text-sm text-gray-600 mt-4") Chưa có tài khoản?
-          a(href="/auth/signup" class="ml-1 text-amber-800 font-semibold hover:underline") Đăng ký ngay
+        div(class="mt-4 flex flex-col items-center gap-3 text-center")
+          a(href="/auth/forgot-password" class="text-sm text-amber-800 hover:underline") Quên mật khẩu?
+
+          p(class="text-sm text-gray-600")
+            | Chưa có tài khoản?
+            a(href="/auth/signup" class="ml-1 text-amber-800 font-semibold hover:underline") Đăng ký ngay
+
+          a(href="/" class="text-sm text-gray-600 hover:underline") Về trang chủ
 
       div(class="bg-[#4A3525] p-8 md:p-12 flex flex-col justify-center text-white")
         span(class="text-2xl font-extrabold mb-6") PetCare
